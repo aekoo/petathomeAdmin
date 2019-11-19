@@ -4,7 +4,7 @@ export default {
   'menu.home': '首页',
   'menu.orders': '订单管理',
   'menu.customer': '客户管理',
-  'menu.configuration': '配置管理',
+  'menu.deploy': '配置管理',
   'menu.employee': '爱宠官管理',
   'menu.admin': '管理页',
   'menu.login': '登录',

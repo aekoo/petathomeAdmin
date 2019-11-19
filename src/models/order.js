@@ -1,6 +1,6 @@
 import { addRule, queryOrder, removeRule, updateRule } from '../services/order';
 
-const Model = {
+const OrderModel = {
   namespace: 'orders',
   state: {
     data: {
@@ -50,4 +50,4 @@ const Model = {
     },
   },
 };
-export default Model;
+export default OrderModel;
