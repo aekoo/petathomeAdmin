@@ -195,13 +195,11 @@ export default {
     basePath: '/',
   },
   chainWebpack: webpackPlugin,
-  /*
   proxy: {
-    '/server/api/': {
-      target: 'https://preview.pro.ant.design/',
+    '/admin': {
+      target: 'http://petinhome.net/',
       changeOrigin: true,
-      pathRewrite: { '^/server': '' },
+      // pathRewrite: { '^/admin': '' },
     },
   },
-  */
 };

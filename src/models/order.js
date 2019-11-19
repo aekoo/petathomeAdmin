@@ -1,4 +1,4 @@
-import { addRule, queryRule, removeRule, updateRule } from './service';
+import { addRule, queryOrder, removeRule, updateRule } from '../services/order';
 
 const Model = {
   namespace: 'orders',
@@ -10,7 +10,7 @@ const Model = {
   },
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryRule, payload);
+      const response = yield call(queryOrder, payload);
       yield put({
         type: 'save',
         payload: response,

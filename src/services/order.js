@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
-export async function queryRule(params) {
-  return request('/api/rule', {
+export async function queryOrder(params) {
+  return request('/admin/order/queryOrderPageList', {
     params,
   });
 }

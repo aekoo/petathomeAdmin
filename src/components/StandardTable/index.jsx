@@ -76,7 +76,7 @@ class StandardTable extends Component {
   render() {
     const { selectedRowKeys, needTotalList } = this.state;
     const { data, rowKey, ...rest } = this.props;
-    const { list = [], pagination = false } = data || {};
+    const { recordList = [], pagination = false } = data || {};
     const paginationProps = pagination
       ? {
           showSizeChanger: true,
@@ -141,7 +141,7 @@ class StandardTable extends Component {
         <Table
           rowKey={rowKey || 'key'}
           rowSelection={rowSelection}
-          dataSource={list}
+          dataSource={recordList}
           pagination={paginationProps}
           onChange={this.handleTableChange}
           {...rest}
