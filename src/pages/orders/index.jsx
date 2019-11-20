@@ -17,7 +17,7 @@ const getValue = obj =>
     .join(',');
 
 const serverType = ['上门喂猫', '上门遛狗'];
-const payStatusMap = ['Warning', 'success', 'processing', 'purple', 'default'];
+const payStatusMap = ['warning', 'success', 'processing', 'purple', 'default'];
 const payStatus = ['待支付', '已支付', '已申请退款', '已退款', '已取消'];
 const serverStatusMap = ['success', 'processing', 'default'];
 const serverStatus = ['未服务', '进行中', '已结束'];
@@ -112,15 +112,19 @@ class OrderList extends Component {
   ];
 
   componentDidMount() {
+    this.fetchListData();
+  }
+  fetchListData = (params) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'orders/fetch',
+      payload: params,
     });
   }
   // 查询
   handleSearch = e => {
     e.preventDefault();
-    const { dispatch, form } = this.props;
+    const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       const values = {
@@ -130,23 +134,17 @@ class OrderList extends Component {
       this.setState({
         formValues: values,
       });
-      dispatch({
-        type: 'orders/fetch',
-        payload: values,
-      });
+      this.fetchListData(values);
     });
   };
   // 重置
   handleFormReset = () => {
-    const { form, dispatch } = this.props;
+    const { form } = this.props;
     form.resetFields();
     this.setState({
       formValues: {},
     });
-    dispatch({
-      type: 'orders/fetch',
-      payload: {},
-    });
+    this.fetchListData();
   };
 
 
@@ -198,7 +196,6 @@ class OrderList extends Component {
 
   // 切换页码
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
     const { formValues } = this.state;
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
@@ -216,10 +213,7 @@ class OrderList extends Component {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
 
-    dispatch({
-      type: 'orders/fetch',
-      payload: params,
-    });
+    this.fetchListData(params);
   };
 
   renderForm() {
@@ -272,7 +266,7 @@ class OrderList extends Component {
   }
 
   render() {
-    const { orders: { data: { results } }, loading, } = this.props;
+    const { orders: { listData: { results } }, loading, } = this.props;
     this.p.total = results ? results.recordSum : 10;
     const { recordList = [] } = results || {};
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;

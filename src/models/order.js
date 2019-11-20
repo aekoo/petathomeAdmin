@@ -1,8 +1,9 @@
-import { addRule, queryOrder, removeRule, updateRule } from '../services/order';
+import { addRule, queryOrder, removeRule, updateRule } from '@/services/order';
 
 const OrderModel = {
   namespace: 'orders',
   state: {
+    listData: {},
     data: {
       list: [],
       pagination: {},
@@ -46,7 +47,7 @@ const OrderModel = {
   },
   reducers: {
     save(state, action) {
-      return { ...state, data: action.payload };
+      return { ...state, listData: action.payload };
     },
   },
 };

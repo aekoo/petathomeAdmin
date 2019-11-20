@@ -1,71 +1,151 @@
-import React from 'react';
-import { Card, Typography, Alert } from 'antd';
+import { Avatar, Button, Card, Col, Form, Input, Table, Row, Select, message, } from 'antd';
+import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { FormattedMessage } from 'umi-plugin-react/locale';
+import { connect } from 'dva';
+import styles from './style.less';
 
-const CodePreview = ({ children }) => (
-  <pre
-    style={{
-      background: '#f2f4f5',
-      padding: '12px 20px',
-      margin: '12px 0',
-    }}
-  >
-    <code>
-      <Typography.Text copyable>{children}</Typography.Text>
-    </code>
-  </pre>
-);
+const FormItem = Form.Item;
+const { Option } = Select;
 
-export default () => (
-  <PageHeaderWrapper>
-    <Card>
-      <Alert
-        message="umi ui 现已发布，欢迎使用 npm run ui 启动体验。"
-        type="success"
-        showIcon
-        banner
-        style={{
-          margin: -12,
-          marginBottom: 24,
-        }}
-      />
-      <Typography.Text strong>
-        <a target="_blank" rel="noopener noreferrer" href="https://pro.ant.design/docs/block">
-          <FormattedMessage
-            id="app.welcome.link.block-list"
-            defaultMessage="基于 block 开发，快速构建标准页面"
+const getValue = obj =>
+  Object.keys(obj)
+    .map(key => obj[key])
+    .join(',');
+
+const sexType = ['未知', '男', '女'];
+
+/* eslint react/no-multi-comp:0 */
+@connect(({ customer, loading }) => ({
+  customer,
+  loading: loading.models.customer,
+}))
+class CustomerList extends Component {
+  state = {
+    selectedRows: [],
+    formValues: {},
+  };
+  p = {
+    pageNum: 1,
+    pageSize: 10,
+    total: 0,//总条数
+  }
+
+  columns = [
+    {
+      title: '用户ID',
+      dataIndex: 'userId',
+      width: 280,
+      render: val => <a>{val}</a>,
+    },
+    {
+      title: '头像',
+      dataIndex: 'avatar',
+      render: val => <Avatar size={64} icon="user" src={val} />,
+      width: 100,
+    },
+    {
+      title: '昵称',
+      dataIndex: 'nickName',
+      width: 200,
+    },
+    {
+      title: '性别',
+      dataIndex: 'gender',
+      render: val => sexType[val],
+      width: 80,
+    },
+    {
+      title: '年龄',
+      dataIndex: 'age',
+      width: 80,
+      render: val => val || '-',
+    },
+    {
+      title: '生日',
+      dataIndex: 'birthday',
+      width: 200,
+      render: val => val || '-',
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      width: 200,
+    },
+    {
+      title: '更新时间',
+      dataIndex: 'updateTime',
+      width: 200,
+    },
+    {
+      title: '宠物信息',
+      dataIndex: 'pet',
+      width: 100,
+      align: 'center',
+      render: () => <a>查看</a>,
+    },
+  ];
+
+  componentDidMount() {
+    this.fetchListData();
+  }
+  fetchListData = (values) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'customer/fetchCustomer',
+      payload: values,
+    });
+  }
+
+
+
+  // 切换页码
+  handleStandardTableChange = (pagination, filtersArg, sorter) => {
+    const { formValues } = this.state;
+    const filters = Object.keys(filtersArg).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
+    const params = {
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+      ...formValues,
+      ...filters,
+    };
+
+    if (sorter.field) {
+      params.sorter = `${sorter.field}_${sorter.order}`;
+    }
+
+    this.fetchListData(params);
+  };
+
+
+  render() {
+    const { customer: { listData: { results } }, loading, } = this.props;
+    this.p.total = results ? results.recordSum : 10;
+    const { recordList = [] } = results || {};
+    return (
+      <PageHeaderWrapper>
+        <Card bordered={false}>
+          <Table
+            rowKey={record => record.userId}
+            loading={loading}
+            columns={this.columns}
+            dataSource={recordList}
+            onChange={this.handleStandardTableChange}
+            pagination={{
+              showQuickJumper: true,
+              showSizeChanger: true,
+              pageSize: this.p.pageSize || 1,
+              total: this.p.total,
+              showTotal: (t) => <div>共{t}条</div>
+            }}
           />
-        </a>
-      </Typography.Text>
-      <CodePreview>npx umi block list</CodePreview>
-      <Typography.Text
-        strong
-        style={{
-          marginBottom: 12,
-        }}
-      >
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://pro.ant.design/docs/available-script#npm-run-fetchblocks"
-        >
-          <FormattedMessage id="app.welcome.link.fetch-blocks" defaultMessage="获取全部区块" />
-        </a>
-      </Typography.Text>
-      <CodePreview> npm run fetch:blocks</CodePreview>
-    </Card>
-    <p
-      style={{
-        textAlign: 'center',
-        marginTop: 24,
-      }}
-    >
-      Want to add more pages? Please refer to{' '}
-      <a href="https://pro.ant.design/docs/block-cn" target="_blank" rel="noopener noreferrer">
-        use block
-      </a>
-      。
-    </p>
-  </PageHeaderWrapper>
-);
+        </Card>
+      </PageHeaderWrapper>
+    );
+  }
+}
+
+export default Form.create()(CustomerList);
