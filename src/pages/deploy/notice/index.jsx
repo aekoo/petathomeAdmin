@@ -1,4 +1,17 @@
-import { Button, Card, Col, Divider, Form, Table, Row, Icon, Popconfirm, Select, Switch, message, } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Form,
+  Table,
+  Row,
+  Icon,
+  Popconfirm,
+  Select,
+  Switch,
+  message,
+} from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
@@ -13,7 +26,6 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 
-
 /* eslint react/no-multi-comp:0 */
 @connect(({ deploy, loading }) => ({
   deploy,
@@ -26,8 +38,8 @@ class NoticeList extends Component {
   p = {
     pageNum: 1,
     pageSize: 10,
-    total: 0,//总条数
-  }
+    total: 0, //总条数
+  };
 
   columns = [
     {
@@ -50,7 +62,14 @@ class NoticeList extends Component {
       title: '是否启用',
       dataIndex: 'display',
       width: 100,
-      render: (text, record) => <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} checked={!!text} onChange={() => this.openNotice(record)} />,
+      render: (text, record) => (
+        <Switch
+          checkedChildren={<Icon type="check" />}
+          unCheckedChildren={<Icon type="close" />}
+          checked={!!text}
+          onChange={() => this.displayNotice(record)}
+        />
+      ),
     },
     {
       title: '操作',
@@ -61,7 +80,13 @@ class NoticeList extends Component {
         <span>
           <a>编辑</a>
           <Divider type="vertical" />
-          <Popconfirm title="确定要删除？" icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}><a href="#">删除</a></Popconfirm>
+          <Popconfirm
+            title="确定要删除？"
+            onConfirm={() => this.deleteNotice(record)}
+            icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
+          >
+            <a href="#">删除</a>
+          </Popconfirm>
         </span>
       ),
     },
@@ -70,18 +95,43 @@ class NoticeList extends Component {
   componentDidMount() {
     this.fetchListData();
   }
-  fetchListData = (values) => {
+  // 查询列表
+  fetchListData = values => {
     const { dispatch } = this.props;
     dispatch({
       type: 'deploy/fetchNotice',
       payload: values,
     });
-  }
-  // 开启关闭通知
-  openNotice = (record) => {
+  };
+  // 添加-编辑通知
+  editNotice = params => {
+    const { dispatch } = this.props;
+    console.log(params);
+
+    dispatch({
+      type: 'deploy/editNotice',
+      payload: params,
+    });
+    this.handleModalVisible(false);
+  };
+  // 删除通知
+  deleteNotice = record => {
+    const { dispatch } = this.props;
     const { textId } = record;
-    console.log(record);
-  }
+    dispatch({
+      type: 'deploy/deleteNotice',
+      payload: { textId },
+    });
+  };
+  // 开启-关闭通知
+  displayNotice = record => {
+    const { dispatch } = this.props;
+    const { textId } = record;
+    dispatch({
+      type: 'deploy/displayNotice',
+      payload: { textId },
+    });
+  };
 
   handleModalVisible = flag => {
     this.setState({
@@ -89,12 +139,16 @@ class NoticeList extends Component {
     });
   };
 
-
   render() {
-    const { deploy: { noticeData: { results = [] } }, loading, } = this.props;
+    const {
+      deploy: {
+        noticeData: { results = [] },
+      },
+      loading,
+    } = this.props;
     const { modalVisible } = this.state;
     const parentMethods = {
-      handleAdd: this.handleAdd,
+      handleAdd: this.editNotice,
       handleModalVisible: this.handleModalVisible,
     };
     return (
@@ -102,7 +156,9 @@ class NoticeList extends Component {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>添加</Button>
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                添加
+              </Button>
             </div>
             <Table
               rowKey={record => record.textId}

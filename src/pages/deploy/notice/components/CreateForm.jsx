@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form, Input, Modal, Switch, Icon, Upload } from 'antd';
+import UploadUrl from '@/services/upload';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -15,7 +16,7 @@ class CreateForm extends Component {
     super(props);
     this.state = {
       loading: false,
-      imageUrl: ''
+      imageUrl: '',
     };
   }
 
@@ -61,58 +62,46 @@ class CreateForm extends Component {
         onOk={this.okHandle}
         onCancel={() => handleModalVisible()}
       >
-        <FormItem
-          labelCol={{ span: 5, }}
-          wrapperCol={{ span: 15, }}
-          label="Icon"
-        >
+        <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Icon">
           {form.getFieldDecorator('icon')(
             <Upload
               name="icon"
               listType="picture-card"
               className="avatar-uploader"
               showUploadList={false}
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              action={UploadUrl}
+              data={{ type: 2 }}
               onChange={this.uploadChange}
             >
-              {imageUrl ? <img src={imageUrl} alt="icon" style={{ width: '100%' }} /> : uploadButton}
-            </Upload>
+              {imageUrl ? (
+                <img src={imageUrl} alt="icon" style={{ width: '100%' }} />
+              ) : (
+                uploadButton
+              )}
+            </Upload>,
           )}
         </FormItem>
-        <FormItem
-          labelCol={{ span: 5, }}
-          wrapperCol={{ span: 15, }}
-          label="内容"
-        >
+        <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="内容">
           {form.getFieldDecorator('textContent', {
-            rules: [{ required: true, message: '请输入通知消息内容！', },],
-          })(
-            <TextArea placeholder="请输入" rows={4} />
-          )}
+            rules: [{ required: true, message: '请输入通知消息内容！' }],
+          })(<TextArea placeholder="请输入" rows={4} />)}
         </FormItem>
-        <FormItem
-          labelCol={{ span: 5, }}
-          wrapperCol={{ span: 15, }}
-          label="链接"
-        >
+        <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="链接">
           {form.getFieldDecorator('link', {
-            rules: [{ required: true, message: '请输入链接地址！', },],
-          })(
-            <Input placeholder="请输入" />
-          )}
+            rules: [{ required: true, message: '请输入链接地址！' }],
+          })(<Input placeholder="请输入" />)}
         </FormItem>
-        <FormItem
-          labelCol={{ span: 5, }}
-          wrapperCol={{ span: 15, }}
-          label="立即启用"
-        >
+        <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="立即启用">
           {form.getFieldDecorator('display', { initialValue: 0 })(
-            <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} />
+            <Switch
+              checkedChildren={<Icon type="check" />}
+              unCheckedChildren={<Icon type="close" />}
+            />,
           )}
         </FormItem>
       </Modal>
     );
   }
-};
+}
 
 export default Form.create()(CreateForm);
