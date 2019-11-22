@@ -33,3 +33,11 @@ export const getAuthorityFromRouter = (router = [], pathname) => {
   if (authority) return authority;
   return undefined;
 };
+
+export const jsonToFormData = (params) => {
+  const formData = new FormData();
+  for (const key in params) {
+    formData.append(key, params[key]);
+  }
+  return formData;
+};

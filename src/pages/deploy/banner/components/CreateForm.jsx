@@ -1,16 +1,17 @@
-import { Form, Input, Modal, Switch, Icon, Upload, message } from 'antd';
+import { Form, Input, Modal, Select, Icon, Upload, message } from 'antd';
 import React, { Component } from 'react';
 import UploadUrl from '@/services/upload';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
+const { Option } = Select;
 
 class CreateForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
-      textId: '',
+      bannerId: '',
       imageUrl: '',
       file: ''
     };
@@ -18,14 +19,14 @@ class CreateForm extends Component {
   componentDidMount() {
     const { record, form } = this.props;
     if (record) {
-      const { textId, icon, link, textContent, display } = record;
-      this.setState({ textId, imageUrl: icon });
-      // form.setFieldsValue({ link, textContent, display });
-      form.setFieldsValue({ link, textContent });
+      const { bannerId, image, link, remark, display } = record;
+      this.setState({ bannerId, imageUrl: image });
+      // form.setFieldsValue({ link, remark, display });
+      form.setFieldsValue({ link, remark });
     }
   }
 
-  //上传logo
+  //上传
   uploadChange = (info) => {
     if (info.file.status === 'uploading') {
       this.setState({ loading: true });
@@ -51,16 +52,16 @@ class CreateForm extends Component {
   // 确定
   okHandle = () => {
     const { form, handleAdd } = this.props;
-    const { textId = '', imageUrl = '' } = this.state;
+    const { bannerId = '', imageUrl = '' } = this.state;
 
-    if (!imageUrl) return message.warn('请上传Icon！');
+    if (!imageUrl) return message.warn('请上传Banner！');
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       form.resetFields();
       let params = {
         ...fieldsValue,
-        textId,
-        icon: imageUrl
+        bannerId,
+        image: imageUrl
       }
       handleAdd(params);
     });
@@ -79,13 +80,13 @@ class CreateForm extends Component {
     return (
       <Modal
         destroyOnClose
-        title={`${record.textId ? '编辑' : '添加'}通知消息`}
+        title={`${record.bannerId ? '编辑' : '添加'}Banner`}
         visible={true}
         onOk={this.okHandle}
         onCancel={() => handleModalVisible()}
       >
-        <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Icon">
-          {form.getFieldDecorator('icon', {
+        <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="图片">
+          {form.getFieldDecorator('image', {
             rules: [{ required: true, message: '请输上传banner图片！' }]
           })(
             <Upload
@@ -101,14 +102,24 @@ class CreateForm extends Component {
             </Upload>,
           )}
         </FormItem>
-        <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="内容">
-          {form.getFieldDecorator('textContent', {
-            rules: [{ required: true, message: '请输入通知消息内容！' }],
-          })(<TextArea placeholder="请输入" rows={4} />)}
+        <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="展示位置">
+          {form.getFieldDecorator('position', {
+            initialValue: 'top'
+          })(
+            <Select style={{ width: '100%' }}>
+              <Option value="top">顶部</Option>
+              <Option value="buttom">底部</Option>
+            </Select>
+          )}
         </FormItem>
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="链接">
           {form.getFieldDecorator('link', {
             rules: [{ required: true, message: '请输入链接地址！' }],
+          })(<TextArea placeholder="请输入" rows={4} />)}
+        </FormItem>
+        <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="备注">
+          {form.getFieldDecorator('remark', {
+            rules: [{ required: true, message: '请输入通知消息内容！' }],
           })(<TextArea placeholder="请输入" rows={4} />)}
         </FormItem>
         {/* <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="立即启用">

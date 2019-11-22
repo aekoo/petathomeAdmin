@@ -130,14 +130,9 @@ export default {
                   component: './deploy/notice/index',
                 },
                 {
-                  path: '/deploy/topBanner',
-                  name: 'topBanner',
-                  component: './deploy/topBanner/index',
-                },
-                {
-                  path: '/deploy/bottomBanner',
-                  name: 'bottomBanner',
-                  component: './deploy/bottomBanner/index',
+                  path: '/deploy/banner',
+                  name: 'banner',
+                  component: './deploy/banner/index',
                 },
                 {
                   path: '/deploy/feedCat',
