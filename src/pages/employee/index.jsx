@@ -1,9 +1,9 @@
-import { Badge, Button, Card, Col, Form, Cascader, Table, Row, Select, message, } from 'antd';
+import { Badge, Button, Card, Col, Form, Cascader, Table, Row, Select, message } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import styles from './style.less';
-import cascaderData from '@/utils/cities'
+import cascaderData from '@/utils/cities';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -31,8 +31,8 @@ class EmployeeList extends Component {
   p = {
     pageNum: 1,
     pageSize: 10,
-    total: 0,//总条数
-  }
+    total: 0, //总条数
+  };
 
   columns = [
     {
@@ -84,7 +84,7 @@ class EmployeeList extends Component {
       title: '审核状态',
       dataIndex: 'approvalStatus',
       width: 100,
-      render: val => <Badge status={statusMap[val]} text={approvalStatusMap[val]} />
+      render: val => <Badge status={statusMap[val]} text={approvalStatusMap[val]} />,
     },
     {
       title: '备注',
@@ -103,13 +103,13 @@ class EmployeeList extends Component {
   componentDidMount() {
     this.fetchListData();
   }
-  fetchListData = (values) => {
+  fetchListData = values => {
     const { dispatch } = this.props;
     dispatch({
       type: 'employee/fetchEmployee',
       payload: values,
     });
-  }
+  };
   // 查询
   handleSearch = e => {
     e.preventDefault();
@@ -117,7 +117,7 @@ class EmployeeList extends Component {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       console.log(fieldsValue);
-      const { cascader } = fieldsValue
+      const { cascader } = fieldsValue;
       const province = cascader[0];
       const city = cascader[1];
       const area = cascader[2];
@@ -143,8 +143,6 @@ class EmployeeList extends Component {
     });
     this.fetchListData();
   };
-
-
 
   // 切换页码
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -174,37 +172,50 @@ class EmployeeList extends Component {
     } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
-        <Row gutter={{ md: 8, lg: 24, xl: 48, }}        >
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="审核状态">
               {getFieldDecorator('approvalStatus', { initialValue: '' })(
-                <Select placeholder="请选择" style={{ width: '100%', }}>
+                <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="">全部</Option>
-                  {approvalStatusMap.map((item, i) => <Option key={i} value={i}>{item}</Option>)}
-                </Select>
+                  {approvalStatusMap.map((item, i) => (
+                    <Option key={i} value={i}>
+                      {item}
+                    </Option>
+                  ))}
+                </Select>,
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="地区">
               {getFieldDecorator('cascader', { initialValue: '' })(
-                <Cascader options={cascaderData} placeholder="请选择" />
+                <Cascader options={cascaderData} placeholder="请选择" />,
               )}
             </FormItem>
           </Col>
+          <Col md={8} sm={24}>
+            <span className={styles.submitButtons}>
+              <Button type="primary" htmlType="submit">
+                查询
+              </Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                重置
+              </Button>
+            </span>
+          </Col>
         </Row>
-        <div style={{ overflow: 'hidden', }}        >
-          <div style={{ float: 'right', marginBottom: 24, }}>
-            <Button type="primary" htmlType="submit">查询</Button>
-            <Button style={{ marginLeft: 8, }} onClick={this.handleFormReset}>重置</Button>
-          </div>
-        </div>
       </Form>
     );
   }
 
   render() {
-    const { employee: { listData: { results } }, loading, } = this.props;
+    const {
+      employee: {
+        listData: { results },
+      },
+      loading,
+    } = this.props;
     // this.p.total = results ? results.recordSum : 10;
     return (
       <PageHeaderWrapper>
@@ -222,7 +233,7 @@ class EmployeeList extends Component {
                 showSizeChanger: true,
                 pageSize: this.p.pageSize || 1,
                 total: this.p.total,
-                showTotal: (t) => <div>共{t}条</div>
+                showTotal: t => <div>共{t}条</div>,
               }}
             />
           </div>
