@@ -1,12 +1,28 @@
-import { Badge, Button, Card, Col, Form, Cascader, Table, Row, Select, message } from 'antd';
+import {
+  Badge,
+  Button,
+  Card,
+  Col,
+  Input,
+  Form,
+  Cascader,
+  Table,
+  Row,
+  Select,
+  Popconfirm,
+  message,
+} from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import styles from './style.less';
+import Details from './components/Details';
+import ChildTable from './components/ChildTable';
 import cascaderData from '@/utils/cities';
 
 const FormItem = Form.Item;
 const { Option } = Select;
+const { TextArea } = Input;
 
 const getValue = obj =>
   Object.keys(obj)
@@ -25,8 +41,16 @@ const approvalStatusMap = ['未审核', '审核中', '已通过', '未通过'];
 }))
 class EmployeeList extends Component {
   state = {
+    modalVisible: false,
+    drawerVisible: false,
     selectedRows: [],
     formValues: {},
+    record: {},
+    childData: {},
+    editStatus: '',
+    status: '',
+    editRemark: '',
+    remark: '',
   };
   p = {
     pageNum: 1,
@@ -72,31 +96,45 @@ class EmployeeList extends Component {
       title: '接单数量',
       dataIndex: 'ordersNumber',
       width: 100,
-      render: val => val || '-',
+      render: (text, record) =>
+        (
+          <a href="#" onClick={() => this.showDrawer(record.orders)}>
+            {text}
+          </a>
+        ) || '-',
     },
     {
       title: '待服务订单',
       dataIndex: 'pendingServiceNumber',
       width: 120,
-      render: val => val || '-',
+      render: (text, record) =>
+        (
+          <a href="#" onClick={() => this.showDrawer(record.pendingServiceOrders)}>
+            {text}
+          </a>
+        ) || '-',
     },
     {
       title: '审核状态',
       dataIndex: 'approvalStatus',
-      width: 100,
-      render: val => <Badge status={statusMap[val]} text={approvalStatusMap[val]} />,
+      width: 200,
+      render: (text, record) => this.renderStatus(record),
     },
     {
       title: '备注',
       dataIndex: 'remark',
-      render: val => val || '-',
+      render: (text, record) => this.renderRemark(record),
     },
     {
       title: '详细信息',
       dataIndex: 'desc',
       width: 100,
       align: 'center',
-      render: () => <a>查看</a>,
+      render: (text, record) => (
+        <a href="#" onClick={() => this.showModal(record)}>
+          查看
+        </a>
+      ),
     },
   ];
 
@@ -144,6 +182,57 @@ class EmployeeList extends Component {
     this.fetchListData();
   };
 
+  closeModal = () => {
+    this.handleModalVisible(false);
+  };
+  showModal = record => {
+    this.setState({ record }); //当前行的所有数据
+    this.handleModalVisible(true);
+  };
+  handleModalVisible = flag => {
+    if (flag) {
+      this.setState({ modalVisible: !!flag });
+    } else {
+      this.setState({ modalVisible: !!flag, record: {} }); //清除record
+    }
+  };
+
+  closeDrawer = () => {
+    this.handleDrawerVisible(false);
+  };
+  showDrawer = record => {
+    this.setState({ record }); //当前行的所有数据
+    this.handleDrawerVisible(true);
+  };
+  handleDrawerVisible = flag => {
+    if (flag) {
+      this.setState({ drawerVisible: !!flag });
+    } else {
+      this.setState({ drawerVisible: !!flag, record: {} }); //清除record
+    }
+  };
+
+  // 修改审核状态
+  editStatus = () => {
+    const { dispatch } = this.props;
+    const { editStatus, status } = this.state;
+    dispatch({
+      type: 'employee/updateReview',
+      payload: { shitId: editStatus, status },
+    });
+    this.setState({ editStatus: '', status: '' });
+  };
+  // 编辑备注
+  editRemark = () => {
+    const { dispatch } = this.props;
+    const { editRemark, remark } = this.state;
+    dispatch({
+      type: 'employee/updateRemark',
+      payload: { shitId: editRemark, remark },
+    });
+    this.setState({ editRemark: '', remark: '' });
+  };
+
   // 切换页码
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { formValues } = this.state;
@@ -166,6 +255,86 @@ class EmployeeList extends Component {
     this.fetchListData(params);
   };
 
+  // 修改状态
+  renderStatus(record) {
+    const { editStatus } = this.state;
+    const { shitId, approvalStatus } = record;
+    return editStatus == shitId ? (
+      <Form layout="inline">
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem>
+              <Select
+                style={{ width: 130 }}
+                defaultValue={approvalStatus}
+                onChange={e => this.setState({ status: e })}
+              >
+                {approvalStatusMap.map((item, i) => (
+                  <Option key={i} value={i}>
+                    {item}
+                  </Option>
+                ))}
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <Popconfirm title="确定修改吗?" onConfirm={() => this.editStatus()}>
+              <Button type="primary">保存</Button>
+            </Popconfirm>
+          </Col>
+          <Col md={8} sm={24}>
+            <Button onClick={() => this.setState({ editStatus: '' })}>取消</Button>
+          </Col>
+        </Row>
+      </Form>
+    ) : (
+      <Badge
+        status={statusMap[approvalStatus]}
+        text={approvalStatusMap[approvalStatus]}
+        onClick={() => this.setState({ editStatus: shitId, status: approvalStatus })}
+      />
+    );
+  }
+  // 编辑备注
+  renderRemark(record) {
+    const { editRemark } = this.state;
+    const { shitId, remark } = record;
+    return editRemark == shitId ? (
+      <Form layout="inline">
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem>
+              <TextArea
+                rows={3}
+                placeholder="请输入备注信息"
+                defaultValue={remark}
+                onChange={e => this.setState({ remark: e.target.value })}
+                style={{ width: 260 }}
+              />
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={6} sm={24}>
+            <Button type="primary" onClick={() => this.editRemark()}>
+              保存
+            </Button>
+          </Col>
+          <Col md={6} sm={24}>
+            <Button onClick={() => this.setState({ editRemark: '' })}>取消</Button>
+          </Col>
+        </Row>
+      </Form>
+    ) : (
+      <span onClick={() => this.setState({ editRemark: shitId, remark })}>
+        {remark ? remark : <a>编辑</a>}
+      </span>
+    );
+  }
+
+  // 搜索栏
   renderForm() {
     const {
       form: { getFieldDecorator },
@@ -216,6 +385,12 @@ class EmployeeList extends Component {
       },
       loading,
     } = this.props;
+    const { modalVisible, drawerVisible, record } = this.state;
+    const parentMethods = {
+      handleModalVisible: this.closeModal,
+      handleDrawerVisible: this.closeDrawer,
+      record,
+    };
     // this.p.total = results ? results.recordSum : 10;
     return (
       <PageHeaderWrapper>
@@ -223,7 +398,7 @@ class EmployeeList extends Component {
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
             <Table
-              rowKey={record => record.realName}
+              rowKey={record => record.shitId}
               loading={loading}
               columns={this.columns}
               dataSource={results}
@@ -238,6 +413,8 @@ class EmployeeList extends Component {
             />
           </div>
         </Card>
+        {modalVisible ? <Details {...parentMethods} /> : null}
+        {drawerVisible ? <ChildTable {...parentMethods} /> : null}
       </PageHeaderWrapper>
     );
   }

@@ -119,7 +119,7 @@ class BannerList extends Component {
     this.handleModalVisible(true);
   };
   editClickEvent = record => {
-    this.setState({ record }); //保存编辑的id
+    this.setState({ record }); //当前行的所有数据
     this.handleModalVisible(true);
   };
   handleModalVisible = flag => {

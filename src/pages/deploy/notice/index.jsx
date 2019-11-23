@@ -1,4 +1,4 @@
-import { Button, Card, Divider, Form, Table, Icon, Popconfirm, Switch, message, } from 'antd';
+import { Button, Card, Divider, Form, Table, Icon, Popconfirm, Switch, message } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
@@ -13,18 +13,22 @@ import styles from './style.less';
 class NoticeList extends Component {
   state = {
     modalVisible: false,
-    record: {}
+    record: {},
   };
 
   columns = [
     {
-      title: 'Icon', dataIndex: 'icon', width: 200,
+      title: 'Icon',
+      dataIndex: 'icon',
+      width: 200,
       render: val => <img style={{ width: 40, height: 40 }} src={val} />,
     },
-    { title: '内容', dataIndex: 'textContent', width: 500, },
-    { title: '链接', dataIndex: 'link', width: 300, },
+    { title: '内容', dataIndex: 'textContent', width: 500 },
+    { title: '链接', dataIndex: 'link', width: 300 },
     {
-      title: '是否启用', dataIndex: 'display', width: 100,
+      title: '是否启用',
+      dataIndex: 'display',
+      width: 100,
       render: (text, record) => (
         <Switch
           checkedChildren={<Icon type="check" />}
@@ -35,10 +39,15 @@ class NoticeList extends Component {
       ),
     },
     {
-      title: '操作', dataIndex: 'action', width: 200, align: 'center',
+      title: '操作',
+      dataIndex: 'action',
+      width: 200,
+      align: 'center',
       render: (text, record) => (
         <span>
-          <a href="#" onClick={() => this.editClickEvent(record)}>编辑</a>
+          <a href="#" onClick={() => this.editClickEvent(record)}>
+            编辑
+          </a>
           <Divider type="vertical" />
           <Popconfirm
             title="确定要删除？"
@@ -90,35 +99,39 @@ class NoticeList extends Component {
     });
   };
 
-
   addClickEvent = () => {
     this.handleModalVisible(true);
   };
   editClickEvent = record => {
-    this.setState({ record });//保存编辑的id
+    this.setState({ record }); //当前行的所有数据
     this.handleModalVisible(true);
   };
   handleModalVisible = flag => {
     if (flag) {
       this.setState({ modalVisible: !!flag });
     } else {
-      this.setState({ modalVisible: !!flag, record: {} });//清除编辑的id
+      this.setState({ modalVisible: !!flag, record: {} }); //清除编辑的id
     }
   };
 
   render() {
-    const { deploy: { listData: { results }, }, loading, } = this.props;
+    const {
+      deploy: {
+        listData: { results },
+      },
+      loading,
+    } = this.props;
     let recordList = [];
     if (results && results.recordList) {
-      recordList = results.recordList
+      recordList = results.recordList;
     } else {
-      recordList = results
+      recordList = results;
     }
     const { modalVisible, record } = this.state;
     const parentMethods = {
       handleAdd: this.editFunc,
       handleModalVisible: this.handleModalVisible,
-      record
+      record,
     };
     return (
       <PageHeaderWrapper>
