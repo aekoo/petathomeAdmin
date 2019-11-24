@@ -1,4 +1,5 @@
-import { addRule, queryOrder, removeRule, updateRule } from '@/services/order';
+import { message } from 'antd';
+import { queryOrder, distribution, confirmRefund, editRemark } from '@/services/order';
 
 const OrderModel = {
   namespace: 'orders',
@@ -18,31 +19,32 @@ const OrderModel = {
       });
     },
 
-    *add({ payload, callback }, { call, put }) {
-      const response = yield call(addRule, payload);
+    *editRemark({ payload, callback }, { call, put }) {
+      const response = yield call(editRemark, payload);
+      if (response.code !== 1) {
+        return message.error(response.desc);
+      }
       yield put({
-        type: 'save',
-        payload: response,
+        type: 'fetch',
       });
-      if (callback) callback();
     },
-
-    *remove({ payload, callback }, { call, put }) {
-      const response = yield call(removeRule, payload);
+    *distribution({ payload, callback }, { call, put }) {
+      const response = yield call(distribution, payload);
+      if (response.code !== 1) {
+        return message.error(response.desc);
+      }
       yield put({
-        type: 'save',
-        payload: response,
+        type: 'fetch',
       });
-      if (callback) callback();
     },
-
-    *update({ payload, callback }, { call, put }) {
-      const response = yield call(updateRule, payload);
+    *confirmRefund({ payload, callback }, { call, put }) {
+      const response = yield call(confirmRefund, payload);
+      if (response.code !== 1) {
+        return message.error(response.desc);
+      }
       yield put({
-        type: 'save',
-        payload: response,
+        type: 'fetch',
       });
-      if (callback) callback();
     },
   },
   reducers: {

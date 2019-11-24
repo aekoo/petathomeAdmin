@@ -10,6 +10,7 @@ import {
   Row,
   Select,
   Popconfirm,
+  Popover,
   message,
 } from 'antd';
 import React, { Component, Fragment } from 'react';
@@ -265,7 +266,7 @@ class EmployeeList extends Component {
           <Col md={8} sm={24}>
             <FormItem>
               <Select
-                style={{ width: 130 }}
+                style={{ width: '100%' }}
                 defaultValue={approvalStatus}
                 onChange={e => this.setState({ status: e })}
               >
@@ -301,36 +302,44 @@ class EmployeeList extends Component {
   renderRemark(record) {
     const { editRemark } = this.state;
     const { shitId, remark } = record;
-    return editRemark == shitId ? (
-      <Form layout="inline">
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem>
-              <TextArea
-                rows={3}
-                placeholder="请输入备注信息"
-                defaultValue={remark}
-                onChange={e => this.setState({ remark: e.target.value })}
-                style={{ width: 260 }}
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={6} sm={24}>
-            <Button type="primary" onClick={() => this.editRemark()}>
-              保存
-            </Button>
-          </Col>
-          <Col md={6} sm={24}>
-            <Button onClick={() => this.setState({ editRemark: '' })}>取消</Button>
-          </Col>
-        </Row>
-      </Form>
-    ) : (
-      <span onClick={() => this.setState({ editRemark: shitId, remark })}>
-        {remark ? remark : <a>编辑</a>}
-      </span>
+    return (
+      <Popover
+        title="备注信息"
+        trigger="click"
+        placement="topRight"
+        visible={editRemark == shitId}
+        content={
+          <Form layout="inline">
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={8} sm={24}>
+                <FormItem>
+                  <TextArea
+                    rows={3}
+                    placeholder="请输入备注信息"
+                    defaultValue={remark}
+                    onChange={e => this.setState({ remark: e.target.value })}
+                    style={{ width: 260 }}
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={6} sm={24}>
+                <Button type="primary" onClick={() => this.editRemark()}>
+                  保存
+                </Button>
+              </Col>
+              <Col md={6} sm={24}>
+                <Button onClick={() => this.setState({ editRemark: '' })}>取消</Button>
+              </Col>
+            </Row>
+          </Form>
+        }
+      >
+        <span onClick={() => this.setState({ editRemark: shitId, remark })}>
+          {remark ? remark : <a>编辑</a>}
+        </span>
+      </Popover>
     );
   }
 

@@ -1,25 +1,26 @@
 import request from '@/utils/request';
+import { jsonToFormData } from '@/utils/utils';
 
 export async function queryOrder(params) {
   return request('/admin/order/queryOrderPageList', {
     params,
   });
 }
-export async function removeRule(params) {
-  return request('/api/rule', {
+export async function editRemark(params) {
+  return request('/admin/order/editRemark', {
     method: 'POST',
-    data: { ...params, method: 'delete' },
+    data: jsonToFormData(params),
   });
 }
-export async function addRule(params) {
-  return request('/api/rule', {
+export async function distribution(params) {
+  return request('/admin/order/distribution', {
     method: 'POST',
-    data: { ...params, method: 'post' },
+    data: jsonToFormData(params),
   });
 }
-export async function updateRule(params) {
-  return request('/api/rule', {
+export async function confirmRefund(params) {
+  return request('/admin/order/confirmRefund', {
     method: 'POST',
-    data: { ...params, method: 'update' },
+    data: jsonToFormData(params),
   });
 }

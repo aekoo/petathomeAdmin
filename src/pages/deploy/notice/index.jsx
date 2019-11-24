@@ -51,6 +51,7 @@ class NoticeList extends Component {
           <Divider type="vertical" />
           <Popconfirm
             title="确定要删除？"
+            okType="danger"
             onConfirm={() => this.deleteFunc(record)}
             icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
           >
