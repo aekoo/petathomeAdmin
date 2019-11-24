@@ -27,7 +27,6 @@ export async function displayScrollingText(params) {
   });
 }
 
-
 // banner列表
 export async function queryBannerList(params) {
   return request('/admin/banner/queryPageList', { params });
@@ -49,6 +48,25 @@ export async function deleteBanner(params) {
 // 显示/隐藏
 export async function displayBanner(params) {
   return request('/admin/banner/showOrHideBanner', {
+    method: 'POST',
+    data: jsonToFormData(params),
+  });
+}
+
+// dict 字典
+export async function getDict(params) {
+  return request('/admin/dict/getDict', { params });
+}
+// 添加/修改
+export async function editDict(params) {
+  return request('/admin/dict/addOrUpdateDict', {
+    method: 'POST',
+    data: jsonToFormData(params),
+  });
+}
+// 删除
+export async function deleteDict(params) {
+  return request('/admin/dict/deleteDict', {
     method: 'POST',
     data: jsonToFormData(params),
   });

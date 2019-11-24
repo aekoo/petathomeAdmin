@@ -4,11 +4,13 @@ import {
   editScrollingText,
   deleteScrollingText,
   displayScrollingText,
-
   queryBannerList,
   editBanner,
   deleteBanner,
   displayBanner,
+  getDict,
+  editDict,
+  deleteDict,
 } from '@/services/deploy';
 
 const DeployModel = {
@@ -16,6 +18,7 @@ const DeployModel = {
   state: {
     position: 'top',
     listData: {},
+    dictData: {},
   },
   effects: {
     // 通知
@@ -56,7 +59,7 @@ const DeployModel = {
 
     // banner
     *fetchBanner({ payload }, { call, put, select }) {
-      const { position } = yield select(_ => _.deploy)
+      const { position } = yield select(_ => _.deploy);
       const response = yield call(queryBannerList, { position });
       yield put({
         type: 'saveListData',
@@ -90,10 +93,40 @@ const DeployModel = {
         type: 'fetchBanner',
       });
     },
+
+    // dict 字典
+    *fetchDict({ payload }, { call, put }) {
+      const response = yield call(getDict, { dictType: 1 });
+      yield put({
+        type: 'saveDictData',
+        payload: response,
+      });
+    },
+    *editDict({ payload }, { call, put }) {
+      const response = yield call(editDict, payload);
+      if (response.code !== 1) {
+        return message.error(response.desc);
+      }
+      yield put({
+        type: 'fetchDict',
+      });
+    },
+    *deleteDict({ payload }, { call, put }) {
+      const response = yield call(deleteDict, payload);
+      if (response.code !== 1) {
+        return message.error(response.desc);
+      }
+      yield put({
+        type: 'fetchDict',
+      });
+    },
   },
   reducers: {
     saveListData(state, { payload }) {
       return { ...state, listData: payload };
+    },
+    saveDictData(state, { payload }) {
+      return { ...state, dictData: payload };
     },
     positionChange(state, { payload }) {
       return { ...state, position: payload };

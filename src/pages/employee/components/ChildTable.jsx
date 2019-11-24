@@ -87,7 +87,7 @@ class ChildTable extends Component {
         title={`Ta的订单`}
         width="70%"
         closable={false}
-        onClose={handleDrawerVisible}
+        onClose={() => handleDrawerVisible()}
         visible={true}
       >
         <Table

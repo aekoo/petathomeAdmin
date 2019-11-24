@@ -1,4 +1,4 @@
-import { Form, Input, Modal, Switch, Icon, Upload, message } from 'antd';
+import { Form, Input, Modal, Icon, Upload, message } from 'antd';
 import React, { Component } from 'react';
 import UploadUrl from '@/services/upload';
 
@@ -12,7 +12,7 @@ class CreateForm extends Component {
       loading: false,
       textId: '',
       imageUrl: '',
-      file: ''
+      file: '',
     };
   }
   componentDidMount() {
@@ -26,7 +26,7 @@ class CreateForm extends Component {
   }
 
   //上传logo
-  uploadChange = (info) => {
+  uploadChange = info => {
     if (info.file.status === 'uploading') {
       this.setState({ loading: true });
       return;
@@ -35,7 +35,7 @@ class CreateForm extends Component {
       let res = info.file.response || {};
       let { results = {}, desc, code = '' } = res;
       if (!!code) {
-        message[code === 1 ? 'success' : 'error'](desc)
+        message[code === 1 ? 'success' : 'error'](desc);
         if (code === 1) {
           let { imageUrl } = results;
           this.setState({ imageUrl, loading: false });
@@ -46,7 +46,7 @@ class CreateForm extends Component {
         this.setState({ loading: false });
       }
     }
-  }
+  };
 
   // 确定
   okHandle = () => {
@@ -60,8 +60,8 @@ class CreateForm extends Component {
       let params = {
         ...fieldsValue,
         textId,
-        icon: imageUrl
-      }
+        icon: imageUrl,
+      };
       handleAdd(params);
     });
   };
@@ -86,7 +86,7 @@ class CreateForm extends Component {
       >
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Icon">
           {form.getFieldDecorator('icon', {
-            rules: [{ required: true, message: '请输上传banner图片！' }]
+            rules: [{ required: true, message: '请输上传banner图片！' }],
           })(
             <Upload
               name="file" // 参数名
@@ -94,10 +94,14 @@ class CreateForm extends Component {
               className="avatar-uploader"
               showUploadList={false}
               action={UploadUrl}
-              data={{ type: 2 }}// 其他参数
+              data={{ type: 2 }} // 其他参数
               onChange={this.uploadChange}
             >
-              {imageUrl ? (<img src={imageUrl} alt="icon" style={{ width: '100%' }} />) : (uploadButton)}
+              {imageUrl ? (
+                <img src={imageUrl} alt="icon" style={{ width: '100%' }} />
+              ) : (
+                uploadButton
+              )}
             </Upload>,
           )}
         </FormItem>

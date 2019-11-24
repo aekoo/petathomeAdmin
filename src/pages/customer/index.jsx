@@ -1,11 +1,8 @@
-import { Avatar, Button, Card, Col, Form, Input, Table, Row, Select, message, } from 'antd';
+import { Avatar, Card, Form, Table, message } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
-import styles from './style.less';
-
-const FormItem = Form.Item;
-const { Option } = Select;
+import Link from 'umi/link';
 
 const getValue = obj =>
   Object.keys(obj)
@@ -27,8 +24,8 @@ class CustomerList extends Component {
   p = {
     pageNum: 1,
     pageSize: 10,
-    total: 0,//总条数
-  }
+    total: 0, //总条数
+  };
 
   columns = [
     {
@@ -81,22 +78,20 @@ class CustomerList extends Component {
       dataIndex: 'pet',
       width: 100,
       align: 'center',
-      render: () => <a>查看</a>,
+      render: (text, record) => <Link to={`/pet?userId=${record.userId}`}>查看</Link>,
     },
   ];
 
   componentDidMount() {
     this.fetchListData();
   }
-  fetchListData = (values) => {
+  fetchListData = values => {
     const { dispatch } = this.props;
     dispatch({
       type: 'customer/fetchCustomer',
       payload: values,
     });
-  }
-
-
+  };
 
   // 切换页码
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -120,9 +115,13 @@ class CustomerList extends Component {
     this.fetchListData(params);
   };
 
-
   render() {
-    const { customer: { listData: { results } }, loading, } = this.props;
+    const {
+      customer: {
+        listData: { results },
+      },
+      loading,
+    } = this.props;
     this.p.total = results ? results.recordSum : 10;
     const { recordList = [] } = results || {};
     return (
@@ -139,7 +138,7 @@ class CustomerList extends Component {
               showSizeChanger: true,
               pageSize: this.p.pageSize || 1,
               total: this.p.total,
-              showTotal: (t) => <div>共{t}条</div>
+              showTotal: t => <div>共{t}条</div>,
             }}
           />
         </Card>

@@ -144,6 +144,21 @@ export default {
                   name: 'walkTheDog',
                   component: './deploy/walkTheDog/index',
                 },
+                {
+                  path: '/deploy/petKind',
+                  name: 'petKind',
+                  component: './deploy/petKind/index',
+                },
+                {
+                  path: '/deploy/advanced',
+                  name: 'advanced',
+                  component: './deploy/advanced/index',
+                },
+                {
+                  path: '/deploy/dict',
+                  name: 'dict',
+                  component: './deploy/dict/index',
+                },
               ],
             },
             {
@@ -151,6 +166,10 @@ export default {
               name: 'employee',
               icon: 'team',
               component: './employee/index',
+            },
+            {
+              path: '/pet',
+              component: './pet/index',
             },
             {
               path: '/admin',

@@ -1,4 +1,4 @@
-import { Button, Card, Divider, Form, Table, Icon, Popconfirm, Switch, message } from 'antd';
+import { Button, Card, Divider, Form, Table, Icon, Popconfirm, message } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
@@ -10,34 +10,18 @@ import styles from './style.less';
   deploy,
   loading: loading.models.deploy,
 }))
-class NoticeList extends Component {
+class DictList extends Component {
   state = {
     modalVisible: false,
     record: {},
   };
 
   columns = [
-    {
-      title: 'Icon',
-      dataIndex: 'icon',
-      width: 200,
-      render: val => <img style={{ width: 40, height: 40 }} src={val} />,
-    },
-    { title: '内容', dataIndex: 'textContent', width: 500 },
-    { title: '链接', dataIndex: 'link', width: 300 },
-    {
-      title: '是否启用',
-      dataIndex: 'display',
-      width: 100,
-      render: (text, record) => (
-        <Switch
-          checkedChildren={<Icon type="check" />}
-          unCheckedChildren={<Icon type="close" />}
-          checked={!!text}
-          onChange={() => this.displayFunc(record)}
-        />
-      ),
-    },
+    { title: 'Dict ID', dataIndex: 'dictId' },
+    { title: '字典名称', dataIndex: 'dictName' },
+    { title: '字典值', dataIndex: 'dictValue' },
+    { title: '创建时间', dataIndex: 'createTime' },
+    { title: '更新时间', dataIndex: 'updateTime' },
     {
       title: '操作',
       dataIndex: 'action',
@@ -68,35 +52,24 @@ class NoticeList extends Component {
   // 查询列表
   fetchListData = () => {
     const { dispatch } = this.props;
-    dispatch({ type: 'deploy/fetchNotice' });
+    dispatch({ type: 'deploy/fetchDict' });
   };
-  // 添加-编辑通知
+  // 添加-编辑
   editFunc = params => {
     const { dispatch } = this.props;
-    console.log(params);
-
     dispatch({
-      type: 'deploy/editNotice',
+      type: 'deploy/editDict',
       payload: params,
     });
     this.handleModalVisible();
   };
-  // 删除通知
+  // 删除
   deleteFunc = record => {
     const { dispatch } = this.props;
-    const { textId } = record;
+    const { dictId } = record;
     dispatch({
-      type: 'deploy/deleteNotice',
-      payload: { textId },
-    });
-  };
-  // 开启-关闭通知
-  displayFunc = record => {
-    const { dispatch } = this.props;
-    const { textId, display } = record;
-    dispatch({
-      type: 'deploy/displayNotice',
-      payload: { textId, display: display ? 0 : 1 },
+      type: 'deploy/deleteDict',
+      payload: { dictId },
     });
   };
 
@@ -110,17 +83,18 @@ class NoticeList extends Component {
   render() {
     const {
       deploy: {
-        listData: { results },
+        dictData: { results },
       },
       loading,
     } = this.props;
+    const { modalVisible, record } = this.state;
+
     let recordList = [];
     if (results && results.recordList) {
       recordList = results.recordList;
     } else {
       recordList = results;
     }
-    const { modalVisible, record } = this.state;
     const parentMethods = {
       handleAdd: this.editFunc,
       handleModalVisible: this.handleModalVisible,
@@ -149,4 +123,4 @@ class NoticeList extends Component {
   }
 }
 
-export default Form.create()(NoticeList);
+export default Form.create()(DictList);

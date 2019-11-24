@@ -58,8 +58,8 @@ class Details extends Component {
         destroyOnClose
         title="爱宠官详细信息"
         visible={true}
-        onOk={handleModalVisible}
-        onCancel={handleModalVisible}
+        onOk={() => handleModalVisible()}
+        onCancel={() => handleModalVisible()}
       >
         <Descriptions layout="vertical" bordered>
           <Descriptions.Item label="ID">{shitId}</Descriptions.Item>

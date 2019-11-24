@@ -99,7 +99,7 @@ class EmployeeList extends Component {
       width: 100,
       render: (text, record) =>
         (
-          <a href="#" onClick={() => this.showDrawer(record.orders)}>
+          <a href="#" onClick={() => this.handleDrawerVisible(true, record.orders)}>
             {text}
           </a>
         ) || '-',
@@ -110,7 +110,7 @@ class EmployeeList extends Component {
       width: 120,
       render: (text, record) =>
         (
-          <a href="#" onClick={() => this.showDrawer(record.pendingServiceOrders)}>
+          <a href="#" onClick={() => this.handleDrawerVisible(true, record.pendingServiceOrders)}>
             {text}
           </a>
         ) || '-',
@@ -132,7 +132,7 @@ class EmployeeList extends Component {
       width: 100,
       align: 'center',
       render: (text, record) => (
-        <a href="#" onClick={() => this.showModal(record)}>
+        <a href="#" onClick={() => this.handleModalVisible(true, record)}>
           查看
         </a>
       ),
@@ -183,34 +183,18 @@ class EmployeeList extends Component {
     this.fetchListData();
   };
 
-  closeModal = () => {
-    this.handleModalVisible(false);
-  };
-  showModal = record => {
-    this.setState({ record }); //当前行的所有数据
-    this.handleModalVisible(true);
-  };
-  handleModalVisible = flag => {
-    if (flag) {
-      this.setState({ modalVisible: !!flag });
-    } else {
-      this.setState({ modalVisible: !!flag, record: {} }); //清除record
-    }
+  handleModalVisible = (flag, record) => {
+    this.setState({
+      modalVisible: !!flag,
+      record: record || {},
+    });
   };
 
-  closeDrawer = () => {
-    this.handleDrawerVisible(false);
-  };
-  showDrawer = record => {
-    this.setState({ record }); //当前行的所有数据
-    this.handleDrawerVisible(true);
-  };
-  handleDrawerVisible = flag => {
-    if (flag) {
-      this.setState({ drawerVisible: !!flag });
-    } else {
-      this.setState({ drawerVisible: !!flag, record: {} }); //清除record
-    }
+  handleDrawerVisible = (flag, record) => {
+    this.setState({
+      drawerVisible: !!flag,
+      record: record || {},
+    });
   };
 
   // 修改审核状态
@@ -396,8 +380,8 @@ class EmployeeList extends Component {
     } = this.props;
     const { modalVisible, drawerVisible, record } = this.state;
     const parentMethods = {
-      handleModalVisible: this.closeModal,
-      handleDrawerVisible: this.closeDrawer,
+      handleModalVisible: this.handleModalVisible,
+      handleDrawerVisible: this.handleDrawerVisible,
       record,
     };
     // this.p.total = results ? results.recordSum : 10;
