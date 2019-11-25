@@ -1,4 +1,4 @@
-import { Row, Col, Button, Card, Form, Table, Icon, Select, Popconfirm, message } from 'antd';
+import { Row, Col, Card, Form, Table, Icon, Switch, message } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
@@ -9,19 +9,43 @@ import { connect } from 'dva';
   loading: loading.models.deploy,
 }))
 class VisitingService extends Component {
-
   columns = [
     {
-      title: '', dataIndex: 'type', width: 300,
-      render: val => <img style={{ width: 160, height: 80 }} src={require(`@/assets/image/feed-cat.png`)} />,
+      title: '',
+      dataIndex: 'type',
+      width: 300,
+      render: val => (
+        <img
+          style={{ width: 160, height: 80 }}
+          src={require(`@/assets/image/feed-${val == 1 ? 'dog' : 'cat'}.png`)}
+        />
+      ),
     },
     {
-      title: 'Dict 名称', dataIndex: 'dictName', width: 200,
-      render: (text, record) => record.dictType == 3 ? <a href="#" onClick={() => this.childrenTable(record)}>{text}</a> : text
+      title: '服务类型',
+      dataIndex: 'dictName',
+      width: 200,
+      render: (text, record) =>
+        record.dictType == 3 ? (
+          <a href="#" onClick={() => this.childrenTable(record)}>
+            {text}
+          </a>
+        ) : (
+          text
+        ),
     },
-    { title: 'Dict 值', dataIndex: 'dictValue' },
-    { title: '创建时间', dataIndex: 'createTime' },
-    { title: '更新时间', dataIndex: 'updateTime' },
+    {
+      title: '是否启用',
+      dataIndex: 'display',
+      render: (text, record) => (
+        <Switch
+          checkedChildren={<Icon type="check" />}
+          unCheckedChildren={<Icon type="close" />}
+          checked={!!text}
+          // onChange={() => this.displayFunc(record)}
+        />
+      ),
+    },
   ];
 
   componentDidMount() {
@@ -32,13 +56,15 @@ class VisitingService extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'deploy/fetchDict',
-      payload: { dictType: 4 }
+      payload: { dictType: 4 },
     });
   };
 
-
   render() {
-    const { dictData: { results }, loading, } = this.props;
+    const {
+      dictData: { results },
+      loading,
+    } = this.props;
 
     let recordList = [];
     if (results && results.recordList) {
