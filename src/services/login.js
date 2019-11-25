@@ -1,8 +1,17 @@
 import request from '@/utils/request';
+import { jsonToFormData } from '@/utils/utils';
+
+// export async function fakeAccountLogin(params) {
+//   return request('/api/login/account', {
+//     method: 'POST',
+//     data: params,
+//   });
+// }
+
 export async function fakeAccountLogin(params) {
-  return request('/api/login/account', {
+  return request('/admin/operator/login', {
     method: 'POST',
-    data: params,
+    data: jsonToFormData(params),
   });
 }
 export async function getFakeCaptcha(mobile) {

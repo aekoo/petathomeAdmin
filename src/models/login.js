@@ -10,11 +10,26 @@ const Model = {
   },
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
+      let response = yield call(fakeAccountLogin, payload);
+      if (response.code === 1) {
+        response = {
+          currentAuthority: "admin",
+          status: "ok",
+          type: "account"
+        }
+        localStorage.setItem('loginStatus', true);
+      } else {
+        response = {
+          currentAuthority: "guest",
+          status: "error",
+          type: "account"
+        }
+      }
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       }); // Login successfully
+
 
       if (response.status === 'ok') {
         const urlParams = new URL(window.location.href);
@@ -57,6 +72,8 @@ const Model = {
           }),
         );
       }
+      yield put({ type: 'changeLoginStatus' });
+      localStorage.removeItem('loginStatus');
     },
   },
   reducers: {

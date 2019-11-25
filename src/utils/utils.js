@@ -41,3 +41,11 @@ export const jsonToFormData = (params) => {
   }
   return formData;
 };
+
+export async function sleep(i) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve()
+    }, i)
+  })
+}

@@ -64,8 +64,8 @@ class CreateForm extends Component {
         </FormItem>
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="价格">
           {form.getFieldDecorator('showPrice', {
-            rules: [{ required: true, pattern: /^[0-9]+$/, message: '请输入正确价格！' }],
-          })(<Input placeholder="请输入数字" />)}
+            rules: [{ required: true, pattern: /^(\d+|\d+\.\d{1,2})$/, message: '请输入正确价格！' }],
+          })(<Input placeholder="请输入数字,最多两位小数" />)}
         </FormItem>
       </Modal>
     );

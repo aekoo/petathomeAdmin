@@ -34,10 +34,12 @@ const AuthComponent = ({
     pathname: '',
   },
   user,
+  login,
 }) => {
   const { currentUser } = user;
   const { routes = [] } = route;
-  const isLogin = currentUser && currentUser.name;
+  const status = login.status || localStorage.getItem('loginStatus');
+  const isLogin = currentUser && currentUser.name && status;
   return (
     <Authorized
       authority={getRouteAuthority(location.pathname, routes) || ''}
@@ -48,6 +50,7 @@ const AuthComponent = ({
   );
 };
 
-export default connect(({ user }) => ({
+export default connect(({ user, login }) => ({
   user,
+  status: login.status,
 }))(AuthComponent);

@@ -134,15 +134,20 @@ export default {
                   name: 'banner',
                   component: './deploy/banner/index',
                 },
+                // {
+                //   path: '/deploy/feedCat',
+                //   name: 'feedCat',
+                //   component: './deploy/feedCat/index',
+                // },
+                // {
+                //   path: '/deploy/walkTheDog',
+                //   name: 'walkTheDog',
+                //   component: './deploy/walkTheDog/index',
+                // },
                 {
-                  path: '/deploy/feedCat',
-                  name: 'feedCat',
-                  component: './deploy/feedCat/index',
-                },
-                {
-                  path: '/deploy/walkTheDog',
-                  name: 'walkTheDog',
-                  component: './deploy/walkTheDog/index',
+                  path: '/deploy/goods',
+                  name: 'goods',
+                  component: './deploy/goods/index',
                 },
                 {
                   path: '/deploy/petKind',
@@ -171,13 +176,13 @@ export default {
               path: '/pet',
               component: './pet/index',
             },
-            {
-              path: '/admin',
-              name: 'admin',
-              icon: 'crown',
-              component: './Admin',
-              authority: ['admin'],
-            },
+            // {
+            //   path: '/admin',
+            //   name: 'admin',
+            //   icon: 'crown',
+            //   component: './Admin',
+            //   authority: ['admin'],
+            // },
             {
               component: './404',
             },

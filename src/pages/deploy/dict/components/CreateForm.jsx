@@ -1,7 +1,8 @@
-import { Form, Input, Modal, message } from 'antd';
+import { Form, Input, Modal, Select, message } from 'antd';
 import React, { Component } from 'react';
 
 const FormItem = Form.Item;
+const { Option } = Select;
 
 class CreateForm extends Component {
   constructor(props) {
@@ -37,7 +38,7 @@ class CreateForm extends Component {
   };
 
   render() {
-    const { record, form, handleModalVisible } = this.props;
+    const { dictSelData, record, form, handleModalVisible } = this.props;
     return (
       <Modal
         destroyOnClose
@@ -48,8 +49,14 @@ class CreateForm extends Component {
       >
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Dict类型">
           {form.getFieldDecorator('dictType', {
-            initialValue: 1,
-          })(<Input placeholder="请输入" disabled />)}
+            initialValue: '3',
+          })(
+            <Select style={{ width: '100%' }}>
+              {
+                dictSelData.map(item => <Option key={item.dictId} value={item.dictValue}>{item.dictName}</Option>)
+              }
+            </Select>
+          )}
         </FormItem>
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="Dict名称">
           {form.getFieldDecorator('dictName', {
