@@ -99,7 +99,7 @@ const DeployModel = {
     *fetchDict({ payload }, { call, put, select }) {
       const { dictType } = yield select(_ => _.deploy);
       const response = yield call(getDict, payload || { dictType });
-      if (dictType != 3) {
+      if (payload || dictType != 3) {
         yield put({ type: 'saveDictData', payload: response, });
       } else {
         yield put({ type: 'saveDictSelData', payload: response, });

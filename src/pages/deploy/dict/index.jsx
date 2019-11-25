@@ -182,7 +182,7 @@ class DictList extends Component {
               </Button>
             </div>
             <Table
-              rowKey={record => record.textId}
+              rowKey={record => record.dictId}
               loading={loading}
               columns={this.columns}
               dataSource={recordList}
