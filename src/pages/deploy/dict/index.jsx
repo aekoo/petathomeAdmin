@@ -25,7 +25,7 @@ class DictList extends Component {
     { title: 'Dict ID', dataIndex: 'dictId', width: 300 },
     {
       title: 'Dict 名称', dataIndex: 'dictName', width: 200,
-      render: (text, record) => record.dictType == 3 ? <a href="#" onClick={() => this.childrenTable(record)}>{text}</a> : text
+      render: (text, record) => record.dictType == 3 ? <a  onClick={() => this.childrenTable(record)}>{text}</a> : text
     },
     { title: 'Dict 值', dataIndex: 'dictValue' },
     { title: '创建时间', dataIndex: 'createTime' },
@@ -37,7 +37,7 @@ class DictList extends Component {
       align: 'center',
       render: (text, record) => (
         <span>
-          <a href="#" onClick={() => this.handleModalVisible(true, record)}>编辑</a>
+          <a  onClick={() => this.handleModalVisible(true, record)}>编辑</a>
           <Divider type="vertical" />
           <Popconfirm
             title="确定要删除？"
@@ -45,7 +45,7 @@ class DictList extends Component {
             onConfirm={() => this.deleteFunc(record)}
             icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
           >
-            <a href="#">删除</a>
+            <a >删除</a>
           </Popconfirm>
         </span>
       ),

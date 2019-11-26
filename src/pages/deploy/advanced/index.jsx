@@ -71,7 +71,7 @@ class AdvancedList extends Component {
       align: 'center',
       render: (text, record) => (
         <span>
-          <a href="#" onClick={() => this.handleModalVisible(true, record)}>
+          <a  onClick={() => this.handleModalVisible(true, record)}>
             编辑
           </a>
           <Divider type="vertical" />
@@ -81,7 +81,7 @@ class AdvancedList extends Component {
             onConfirm={() => this.deleteFunc(record)}
             icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
           >
-            <a href="#">删除</a>
+            <a >删除</a>
           </Popconfirm>
         </span>
       ),

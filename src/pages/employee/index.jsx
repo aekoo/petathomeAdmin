@@ -99,21 +99,16 @@ class EmployeeList extends Component {
       width: 100,
       render: (text, record) =>
         (
-          <a href="#" onClick={() => this.handleDrawerVisible(true, record.orders)}>
-            {text}
-          </a>
+          text > 0 ? <a onClick={() => this.handleDrawerVisible(true, record.orders)}>{text}</a> : text
         ) || '-',
     },
     {
       title: '待服务订单',
       dataIndex: 'pendingServiceNumber',
       width: 120,
-      render: (text, record) =>
-        (
-          <a href="#" onClick={() => this.handleDrawerVisible(true, record.pendingServiceOrders)}>
-            {text}
-          </a>
-        ) || '-',
+      render: (text, record) => (
+        text > 0 ? <a onClick={() => this.handleDrawerVisible(true, record.pendingServiceOrders)}>{text}</a> : text
+      ) || '-',
     },
     {
       title: '审核状态',
@@ -132,7 +127,7 @@ class EmployeeList extends Component {
       width: 100,
       align: 'center',
       render: (text, record) => (
-        <a href="#" onClick={() => this.handleModalVisible(true, record)}>
+        <a onClick={() => this.handleModalVisible(true, record)}>
           查看
         </a>
       ),
@@ -275,12 +270,12 @@ class EmployeeList extends Component {
         </Row>
       </Form>
     ) : (
-      <Badge
-        status={statusMap[approvalStatus]}
-        text={approvalStatusMap[approvalStatus]}
-        onClick={() => this.setState({ editStatus: shitId, status: approvalStatus })}
-      />
-    );
+        <Badge
+          status={statusMap[approvalStatus]}
+          text={approvalStatusMap[approvalStatus]}
+          onClick={() => this.setState({ editStatus: shitId, status: approvalStatus })}
+        />
+      );
   }
   // 编辑备注
   renderRemark(record) {

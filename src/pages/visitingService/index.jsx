@@ -26,7 +26,7 @@ class VisitingService extends Component {
       dataIndex: 'dictName',
       width: 200,
       render: (text, record) =>
-        record.dictType == 3 ? <a href="#" onClick={() => this.childrenTable(record)}>{text}</a> : text,
+        record.dictType == 3 ? <a  onClick={() => this.childrenTable(record)}>{text}</a> : text,
     },
     {
       title: '是否启用',
