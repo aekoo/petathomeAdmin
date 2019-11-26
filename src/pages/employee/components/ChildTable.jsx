@@ -18,7 +18,7 @@ class ChildTable extends Component {
     { title: '服务日期', key: 'serverDate', dataIndex: 'serverDate', },
     { title: '服务时间', key: 'serverPeriod', dataIndex: 'serverPeriod', },
     { title: '服务地址', key: 'address', dataIndex: 'address', },
-    { title: '订单金额', key: 'totalMoney', dataIndex: 'totalMoney', render: val => `${val} 元`, },
+    { title: '订单金额', key: 'tradeMoney', dataIndex: 'tradeMoney', render: val => `${(val / 100).toFixed(2)} 元`, },
     {
       title: '支付状态', key: 'payStatus', dataIndex: 'payStatus',
       render: val => {
