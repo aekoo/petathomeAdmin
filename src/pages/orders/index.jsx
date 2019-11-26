@@ -19,6 +19,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import moment from 'moment';
 import StandardTable from '../../components/StandardTable';
+import Details from './components/Details';
 import Allocation from './components/Allocation';
 import UpdateForm from './components/UpdateForm';
 import styles from './style.less';
@@ -45,6 +46,7 @@ const serverStatus = ['未服务', '进行中', '已结束'];
 }))
 class OrderList extends Component {
   state = {
+    detailsModalVisible: false,
     modalVisible: false,
     updateModalVisible: false,
     selectedRows: [],
@@ -61,76 +63,31 @@ class OrderList extends Component {
   };
 
   columns = [
+    { title: '订单号', key: 'orderNo', dataIndex: 'orderNo', render: (val, record) => <a onClick={() => this.handleDetailsModal(true, record)}>{val}</a>, },
+    { title: '服务类别', key: 'serverType', dataIndex: 'serverType', render: val => serverType[val], },
+    { title: '服务地址', key: 'address', dataIndex: 'address', },
+    { title: '服务日期', key: 'serverDate', dataIndex: 'serverDate', },
+    { title: '服务时间', key: 'serverPeriod', dataIndex: 'serverPeriod', },
+    { title: '订单金额', key: 'totalMoney', dataIndex: 'totalMoney', render: text => `${text} 元`, },
     {
-      title: '订单号',
-      key: 'orderNo',
-      dataIndex: 'orderNo',
-      render: val => <a>{val}</a>,
+      title: '支付状态', key: 'payStatus', dataIndex: 'payStatus',
+      render: text => text == '-1' ? <Badge status="error" text="支付失败" /> : <Badge status={payStatusMap[text]} text={payStatus[text]} />
+
     },
     {
-      title: '服务类别',
-      key: 'serverType',
-      dataIndex: 'serverType',
-      render: val => serverType[val],
+      title: '爱宠官', key: 'lovePetOfficerName', dataIndex: 'lovePetOfficerName',
+      render: (text, record) => text ? text : <a onClick={() => this.handleModalVisible(true, record)}>未分配</a>,
     },
     {
-      title: '服务地址',
-      key: 'address',
-      dataIndex: 'address',
+      title: '服务状态', key: 'serverStatus', dataIndex: 'serverStatus',
+      render: (text) => <Badge status={serverStatusMap[text]} text={serverStatus[text]} />
     },
     {
-      title: '服务日期',
-      key: 'serverDate',
-      dataIndex: 'serverDate',
-    },
-    {
-      title: '服务时间',
-      key: 'serverPeriod',
-      dataIndex: 'serverPeriod',
-    },
-    {
-      title: '订单金额',
-      key: 'totalMoney',
-      dataIndex: 'totalMoney',
-      render: text => `${text} 元`,
-    },
-    {
-      title: '支付状态',
-      key: 'payStatus',
-      dataIndex: 'payStatus',
-      render: text => {
-        return text == '-1' ? (
-          <Badge status="error" text="支付失败" />
-        ) : (
-          <Badge status={payStatusMap[text]} text={payStatus[text]} />
-        );
-      },
-    },
-    {
-      title: '爱宠官',
-      key: 'lovePetOfficerName',
-      dataIndex: 'lovePetOfficerName',
-      render: (text, record) =>
-        text ? text : <a onClick={() => this.handleModalVisible(true, record)}>未分配</a>,
-    },
-    {
-      title: '服务状态',
-      key: 'serverStatus',
-      dataIndex: 'serverStatus',
-      render(text) {
-        return <Badge status={serverStatusMap[text]} text={serverStatus[text]} />;
-      },
-    },
-    {
-      title: '备注',
-      key: 'remark',
-      dataIndex: 'remark',
+      title: '备注', key: 'remark', dataIndex: 'remark',
       render: (text, record) => this.renderRemark(record),
     },
     {
-      title: '评价',
-      key: 'evaluationStatus',
-      dataIndex: 'evaluationStatus',
+      title: '评价', key: 'evaluationStatus', dataIndex: 'evaluationStatus',
       render: (text, record) =>
         text == 1 ? (
           <Popover
@@ -147,12 +104,11 @@ class OrderList extends Component {
             <a>已评价</a>
           </Popover>
         ) : (
-          '未评价'
-        ),
+            '未评价'
+          ),
     },
     {
-      title: '操作',
-      dataIndex: 'action',
+      title: '操作', dataIndex: 'action',
       render: (val, record) =>
         record.payStatus == '2' ? (
           <Popconfirm
@@ -205,6 +161,13 @@ class OrderList extends Component {
     this.fetchListData();
   };
 
+  handleDetailsModal = (flag, record) => {
+    this.setState({
+      detailsModalVisible: !!flag,
+      record: record || {},
+    });
+  };
+
   handleModalVisible = (flag, record) => {
     this.setState({
       modalVisible: !!flag,
@@ -221,11 +184,6 @@ class OrderList extends Component {
     this.handleModalVisible();
   };
 
-  handleSelectRows = rows => {
-    this.setState({
-      selectedRows: rows,
-    });
-  };
 
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
@@ -395,10 +353,13 @@ class OrderList extends Component {
     } = this.props;
     this.p.total = results ? results.recordSum : 10;
     const { recordList = [] } = results || {};
-    const { selectedRows, modalVisible, updateModalVisible, stepFormValues, record } = this.state;
+    const { detailsModalVisible, modalVisible, updateModalVisible, stepFormValues, record } = this.state;
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
+    };
+    const detailsMethods = {
+      handleDetailsModal: this.handleDetailsModal,
     };
     const updateMethods = {
       handleUpdateModalVisible: this.handleUpdateModalVisible,
@@ -409,26 +370,6 @@ class OrderList extends Component {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
-            {/* <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                新建
-              </Button>
-            </div> */}
-            {/* <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={results}
-              columns={this.columns}
-              onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
-              pagination={{
-                showQuickJumper: true,
-                showSizeChanger: true,
-                pageSize: this.p.pageSize || 1,
-                total: this.p.total,
-                showTotal: (t) => <div>共{t}条</div>
-              }}
-            /> */}
             <Table
               rowKey={record => record.orderNo}
               loading={loading}
@@ -445,6 +386,9 @@ class OrderList extends Component {
             />
           </div>
         </Card>
+        {detailsModalVisible ? (
+          <Details {...detailsMethods} detailsModalVisible={detailsModalVisible} values={record} />
+        ) : null}
         {modalVisible ? (
           <Allocation {...parentMethods} modalVisible={modalVisible} values={record} />
         ) : null}
