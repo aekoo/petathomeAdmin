@@ -1,21 +1,8 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Col,
-  Input,
-  Form,
-  Cascader,
-  Table,
-  Row,
-  Select,
-  Popconfirm,
-  Popover,
-  message,
-} from 'antd';
+import { Badge, Button, Card, Col, Input, Form, Cascader, Table, Row, Select, Popconfirm, Popover, message, } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
+import Link from 'umi/link';
 import styles from './style.less';
 import Details from './components/Details';
 import ChildTable from './components/ChildTable';
@@ -97,10 +84,11 @@ class EmployeeList extends Component {
       title: '接单数量',
       dataIndex: 'ordersNumber',
       width: 100,
-      render: (text, record) =>
-        (
-          text > 0 ? <a onClick={() => this.handleDrawerVisible(true, record.orders)}>{text}</a> : text
-        ) || '-',
+      // render: (text, record) =>
+      //   (
+      //     text > 0 ? <a onClick={() => this.handleDrawerVisible(true, record.orders)}>{text}</a> : text
+      //   ) || '-',
+      render: (text, record) => text > 0 ? <Link to={`/orders?lovePetOfficerName=${record.realName}`}>{text}</Link> : text
     },
     {
       title: '待服务订单',

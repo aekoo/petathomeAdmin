@@ -1,19 +1,4 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  Icon,
-  Table,
-  Row,
-  Rate,
-  Select,
-  Popover,
-  Popconfirm,
-  message,
-} from 'antd';
+import { Badge, Button, Card, Col, Form, Input, Icon, Table, Row, Rate, Select, Popover, Popconfirm, message, } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
@@ -126,7 +111,13 @@ class OrderList extends Component {
   ];
 
   componentDidMount() {
-    this.fetchListData();
+    const { form, location: { query = {} }, } = this.props;
+    if (query.lovePetOfficerName) {
+      form.setFieldsValue({ lovePetOfficerName: query.lovePetOfficerName });
+      this.handleSearch();
+    } else {
+      this.fetchListData();
+    }
   }
   fetchListData = params => {
     const { dispatch } = this.props;
@@ -136,8 +127,7 @@ class OrderList extends Component {
     });
   };
   // 查询
-  handleSearch = e => {
-    e.preventDefault();
+  handleSearch = () => {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
