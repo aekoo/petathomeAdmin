@@ -21,8 +21,8 @@ class CreateForm extends Component {
     if (record) {
       const { bannerId, image, link, remark, display } = record;
       this.setState({ bannerId, imageUrl: image });
-      // form.setFieldsValue({ link, remark, display });
-      form.setFieldsValue({ link, remark });
+      // form.setFieldsValue({ image, link, remark, display });
+      form.setFieldsValue({ image, link, remark });
     }
   }
 

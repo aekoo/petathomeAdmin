@@ -35,7 +35,7 @@ class VisitingService extends Component {
         <Switch
           checkedChildren={<Icon type="check" />}
           unCheckedChildren={<Icon type="close" />}
-          checked={!!text}
+          checked={text == 1}
           onChange={() => this.editFunc(record)}
         />
       ),
@@ -43,22 +43,24 @@ class VisitingService extends Component {
   ];
 
   componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'deploy/dictTypeChange',
+      payload: 4,
+    });
     this.fetchListData();
   }
   // 查询列表
   fetchListData = () => {
     const { dispatch } = this.props;
-    dispatch({
-      type: 'deploy/fetchDict',
-      payload: { dictType: 4 },
-    });
+    dispatch({ type: 'deploy/fetchDict', });
   };
   // 添加-编辑
   editFunc = params => {
     const { dispatch } = this.props;
     dispatch({
       type: 'deploy/editDict',
-      payload: { dictType: 4, dictId: params.dictId, dictValue: params.dictValue ? 0 : 1 },
+      payload: { dictType: 4, dictId: params.dictId, dictValue: params.dictValue == 1 ? 0 : 1 },
     });
   };
 

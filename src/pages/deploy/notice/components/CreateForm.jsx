@@ -20,8 +20,8 @@ class CreateForm extends Component {
     if (record) {
       const { textId, icon, link, textContent, display } = record;
       this.setState({ textId, imageUrl: icon });
-      // form.setFieldsValue({ link, textContent, display });
-      form.setFieldsValue({ link, textContent });
+      // form.setFieldsValue({ icon, link, textContent, display });
+      form.setFieldsValue({ icon, link, textContent });
     }
   }
 
@@ -100,8 +100,8 @@ class CreateForm extends Component {
               {imageUrl ? (
                 <img src={imageUrl} alt="icon" style={{ width: '100%' }} />
               ) : (
-                uploadButton
-              )}
+                  uploadButton
+                )}
             </Upload>,
           )}
         </FormItem>
