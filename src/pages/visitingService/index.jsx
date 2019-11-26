@@ -14,10 +14,10 @@ class VisitingService extends Component {
       title: '',
       dataIndex: 'type',
       width: 300,
-      render: val => (
+      render: (val, record) => (
         <img
-          style={{ width: 160, height: 80 }}
-          src={require(`@/assets/image/feed-${val == 1 ? 'dog' : 'cat'}.png`)}
+          style={{ width: 160, height: 120 }}
+          src={require(`@/assets/image/feed-${record.dictName.indexOf('狗') != -1 ? 'dog' : 'cat'}.png`)}
         />
       ),
     },
@@ -26,23 +26,17 @@ class VisitingService extends Component {
       dataIndex: 'dictName',
       width: 200,
       render: (text, record) =>
-        record.dictType == 3 ? (
-          <a href="#" onClick={() => this.childrenTable(record)}>
-            {text}
-          </a>
-        ) : (
-          text
-        ),
+        record.dictType == 3 ? <a href="#" onClick={() => this.childrenTable(record)}>{text}</a> : text,
     },
     {
       title: '是否启用',
-      dataIndex: 'display',
+      dataIndex: 'dictValue',
       render: (text, record) => (
         <Switch
           checkedChildren={<Icon type="check" />}
           unCheckedChildren={<Icon type="close" />}
           checked={!!text}
-          // onChange={() => this.displayFunc(record)}
+          onChange={() => this.editFunc(record)}
         />
       ),
     },
@@ -57,6 +51,14 @@ class VisitingService extends Component {
     dispatch({
       type: 'deploy/fetchDict',
       payload: { dictType: 4 },
+    });
+  };
+  // 添加-编辑
+  editFunc = params => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'deploy/editDict',
+      payload: { dictId: params.dictId, dictValue: params.dictValue ? 0 : 1 },
     });
   };
 
@@ -76,7 +78,7 @@ class VisitingService extends Component {
       <PageHeaderWrapper>
         <Card bordered={false}>
           <Table
-            rowKey={record => record.textId}
+            rowKey={record => record.dictId}
             loading={loading}
             columns={this.columns}
             dataSource={recordList}

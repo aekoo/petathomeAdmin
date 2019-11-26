@@ -71,6 +71,8 @@ export default {
     defaultGitUrl: 'https://github.com/ant-design/pro-blocks',
   },
   hash: true,
+  history: 'hash',
+  publicPath: './',
   targets: {
     ie: 11,
   },
@@ -242,12 +244,12 @@ export default {
   chainWebpack: webpackPlugin,
   proxy: {
     '/admin': {
-      target: 'http://petinhome.net/',
+      target: 'https://petinhome.net/',
       changeOrigin: true,
       // pathRewrite: { '^/admin': '' },
     },
     '/api': {
-      target: 'http://petinhome.net/',
+      target: 'https://petinhome.net/',
       changeOrigin: true,
     },
   },
