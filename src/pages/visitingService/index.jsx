@@ -26,7 +26,7 @@ class VisitingService extends Component {
       dataIndex: 'dictName',
       width: 200,
       render: (text, record) =>
-        record.dictType == 3 ? <a  onClick={() => this.childrenTable(record)}>{text}</a> : text,
+        record.dictType == 3 ? <a onClick={() => this.childrenTable(record)}>{text}</a> : text,
     },
     {
       title: '是否启用',
@@ -58,7 +58,7 @@ class VisitingService extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'deploy/editDict',
-      payload: { dictId: params.dictId, dictValue: params.dictValue ? 0 : 1 },
+      payload: { dictType: 4, dictId: params.dictId, dictValue: params.dictValue ? 0 : 1 },
     });
   };
 
