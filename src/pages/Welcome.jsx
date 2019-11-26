@@ -3,6 +3,6 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 
 export default () => (
   <PageHeaderWrapper>
-    <iframe src="https://petinhome.net/static/index.html" frameBorder="0" style={{ width: '100%', height: '80vh' }}></iframe>
+    <iframe src="https://petinhome.net/static/time/index.html" frameBorder="0" style={{ width: '100%', height: '80vh' }}></iframe>
   </PageHeaderWrapper>
 );
