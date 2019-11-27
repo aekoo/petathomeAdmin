@@ -18,7 +18,7 @@ const CreateForm = props => {
     serverPeriod = "",
     serverDuration = "",
     keyChose = "",
-    petNumber = "",
+    petIds = "",
     petNames = "",
     totalMoney = "",
     payStatus = "-1",
@@ -29,10 +29,11 @@ const CreateForm = props => {
     evaluationStatus = 0,
     evaluationContent = "",
   } = values || {};
+
+  const petNumber = petIds.split(',').length;
   const advancedServerList = [];
-  serverItemList.map(item =>
-    advancedServerList.push(`${item.serverName} x${item.num}`)
-  )
+  serverItemList.map(item => advancedServerList.push(`${item.serverName} x${item.num}`));
+
   return (
     <Modal
       width={720}
@@ -46,7 +47,7 @@ const CreateForm = props => {
         <Descriptions.Item label="订单编号" span={2}>{orderNo}</Descriptions.Item>
         <Descriptions.Item label="服务类别">{serverTypeText[serverType]}</Descriptions.Item>
         <Descriptions.Item label="服务地址" span={3}>{address}</Descriptions.Item>
-        <Descriptions.Item label="服务日期" span={3}>{serverDate}</Descriptions.Item>
+        <Descriptions.Item label="服务日期" span={3}>{serverDate.replace(/\,/g, '、')}</Descriptions.Item>
         <Descriptions.Item label="钥匙交接" span={3}>{keyChose}</Descriptions.Item>
         <Descriptions.Item label="宠物数量" span={3}>{petNumber}</Descriptions.Item>
 
