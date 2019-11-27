@@ -1,4 +1,4 @@
-import { Badge, Button, Card, Col, Form, Input, Icon, Table, Row, Rate, Select, Popover, Popconfirm, message, } from 'antd';
+import { Badge, Button, Card, Col, Divider, Form, Input, Icon, Table, Row, Rate, Select, Popover, Popconfirm, message, } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
@@ -48,11 +48,16 @@ class OrderList extends Component {
   };
 
   columns = [
-    { title: '订单号', key: 'orderNo', dataIndex: 'orderNo', render: (val, record) => <a onClick={() => this.handleDetailsModal(true, record)}>{val}</a>, },
+    { title: '订单号', key: 'orderNo', dataIndex: 'orderNo', width: 240, render: (val, record) => <a onClick={() => this.handleDetailsModal(true, record)}>{val}</a>, },
     { title: '服务类别', key: 'serverType', dataIndex: 'serverType', render: val => serverType[val], },
     { title: '服务地址', key: 'address', dataIndex: 'address', },
     { title: '服务日期', key: 'serverDate', dataIndex: 'serverDate', },
-    { title: '服务时间', key: 'serverPeriod', dataIndex: 'serverPeriod', },
+    // { title: '服务时间', key: 'serverPeriod', dataIndex: 'serverPeriod', },
+    // { title: '服务时长', key: 'serverDuration', dataIndex: 'serverDuration', },
+    // { title: '宠物数量', key: 'petNumber', dataIndex: 'petNumber', },
+    // { title: '宠物', key: 'petIds', dataIndex: 'petIds', },
+    // { title: '高级服务', key: 'petIds', dataIndex: 'petIds', },
+    // { title: '钥匙交接', key: 'keyHandover', dataIndex: 'keyHandover', },
     { title: '订单金额', key: 'totalMoney', dataIndex: 'totalMoney', render: text => `${text} 元`, },
     {
       title: '支付状态', key: 'payStatus', dataIndex: 'payStatus',
@@ -74,7 +79,7 @@ class OrderList extends Component {
     {
       title: '评价', key: 'evaluationStatus', dataIndex: 'evaluationStatus',
       render: (text, record) =>
-        text == 1 ? (
+        text == 1 ?
           <Popover
             title="评价信息"
             trigger="click"
@@ -88,25 +93,30 @@ class OrderList extends Component {
           >
             <a>已评价</a>
           </Popover>
-        ) : (
-            '未评价'
-          ),
+          :
+          '未评价'
     },
     {
       title: '操作', dataIndex: 'action',
       render: (val, record) =>
-        record.payStatus == '2' ? (
-          <Popconfirm
-            title="确定退款吗?"
-            icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
-            okType="danger"
-            onConfirm={() => this.confirmRefund(record.orderNo)}
-          >
-            <Button type="danger" ghost style={{ marginLeft: 16 }}>
-              退款
-            </Button>
-          </Popconfirm>
-        ) : null,
+        <span>
+          {/* <a onClick={() => this.handleDetailsModal(true, record)}>详情</a> */}
+          {
+            record.payStatus == '2' ?
+              <>
+                <Divider type="vertical" />
+                <Popconfirm
+                  title="确定退款吗?"
+                  icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
+                  okType="danger"
+                  onConfirm={() => this.confirmRefund(record.orderNo)}
+                >
+                  <Button type="danger" ghost style={{ marginLeft: 16 }}>退款</Button>
+                </Popconfirm>
+              </>
+              : null
+          }
+        </span>
     },
   ];
 
