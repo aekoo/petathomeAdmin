@@ -234,6 +234,7 @@ class EmployeeList extends Component {
             <FormItem>
               <Select
                 style={{ width: '100%' }}
+                placeholder="请选择"
                 defaultValue={approvalStatus}
                 onChange={e => this.setState({ status: e })}
               >

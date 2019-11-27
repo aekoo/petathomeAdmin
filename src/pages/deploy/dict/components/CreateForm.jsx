@@ -51,7 +51,7 @@ class CreateForm extends Component {
           {form.getFieldDecorator('dictType', {
             initialValue: '3',
           })(
-            <Select style={{ width: '100%' }}>
+            <Select style={{ width: '100%' }} placeholder="请选择">
               {
                 dictSelData.map(item => <Option key={item.dictId} value={item.dictValue}>{item.dictName}</Option>)
               }

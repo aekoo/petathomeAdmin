@@ -32,10 +32,11 @@ const goodsMap = ['可选数量'];
 class GoodsList extends Component {
   state = {
     modalVisible: false,
+    classification: 0,
     record: {},
   };
 
-  columns = [
+  columns1 = [
     { title: '商品ID', dataIndex: 'goodsId', width: 200 },
     { title: '商品名称', dataIndex: 'goodsName', width: 200 },
     {
@@ -47,7 +48,61 @@ class GoodsList extends Component {
       render: text => goodsMap[text],
     },
     {
-      title: '服务时长', dataIndex: 'serverDuration', width: 200,
+      title: '价格', dataIndex: 'showPrice', width: 200,
+      render: text => `${text} 元`,
+    },
+    {
+      title: '是否启用',
+      dataIndex: 'shelf',
+      width: 130,
+      render: (text, record) => (
+        <Switch
+          checkedChildren={<Icon type="check" />}
+          unCheckedChildren={<Icon type="close" />}
+          checked={!!text}
+          onChange={() => this.displayFunc(record)}
+        />
+      ),
+    },
+    { title: '创建时间', dataIndex: 'createTime', width: 200 },
+    { title: '更新时间', dataIndex: 'updateTime', width: 200 },
+    {
+      title: '操作',
+      dataIndex: 'action',
+      width: 200,
+      align: 'center',
+      render: (text, record) => (
+        <span>
+          <a onClick={() => this.handleModalVisible(true, record)}>
+            编辑
+          </a>
+          <Divider type="vertical" />
+          <Popconfirm
+            title="确定要删除？"
+            okType="danger"
+            onConfirm={() => this.deleteFunc(record)}
+            icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
+          >
+            <a >删除</a>
+          </Popconfirm>
+        </span>
+      ),
+    },
+  ];
+
+  columns2 = [
+    { title: '商品ID', dataIndex: 'goodsId', width: 200 },
+    { title: '商品名称', dataIndex: 'goodsName', width: 200 },
+    {
+      title: '分类', dataIndex: 'classification', width: 200,
+      render: text => typeMap[text],
+    },
+    {
+      title: '商品类型', dataIndex: 'goodsType', width: 200,
+      render: text => goodsMap[text],
+    },
+    {
+      title: '服务时长', dataIndex: 'serverDurationVal', width: 200,
       render: text => text ? `${text} 分钟` : '--',
     },
     {
@@ -76,7 +131,7 @@ class GoodsList extends Component {
       align: 'center',
       render: (text, record) => (
         <span>
-          <a  onClick={() => this.handleModalVisible(true, record)}>
+          <a onClick={() => this.handleModalVisible(true, record)}>
             编辑
           </a>
           <Divider type="vertical" />
@@ -146,6 +201,7 @@ class GoodsList extends Component {
         type: 'goods/searchChange',
         payload: fieldsValue,
       });
+      this.setState({ classification: fieldsValue.classification });
       this.fetchListData();
     });
   };
@@ -205,7 +261,7 @@ class GoodsList extends Component {
   }
   render() {
     const { goods: { listData }, loading, } = this.props;
-    const { modalVisible, record } = this.state;
+    const { modalVisible, classification, record } = this.state;
 
     const parentMethods = {
       handleAdd: this.editFunc,
@@ -225,7 +281,7 @@ class GoodsList extends Component {
             <Table
               rowKey={record => record.goodsId}
               loading={loading}
-              columns={this.columns}
+              columns={classification == 0 ? this.columns1 : this.columns2}
               dataSource={listData}
             />
           </div>

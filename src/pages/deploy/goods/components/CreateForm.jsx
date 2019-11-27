@@ -86,11 +86,11 @@ class CreateForm extends Component {
           showServerDuration ?
             <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="服务时长">
               {form.getFieldDecorator('serverDuration', {
-                initialValue: '30', rules: [{ required: true, message: '请选择服务时长！' }],
+                rules: [{ required: true, message: '请选择服务时长！' }],
               })(
-                <Select style={{ width: '100%' }}>
+                <Select style={{ width: '100%' }} placeholder="请选择">
                   {results.map(item => (
-                    <Option key={item.dictId} value={item.dictValue}>
+                    <Option key={item.dictId} value={item.dictId}>
                       {item.dictName}
                     </Option>
                   ))}

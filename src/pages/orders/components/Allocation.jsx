@@ -63,7 +63,7 @@ class Allocation extends Component {
           {form.getFieldDecorator('shitId', {
             rules: [{ required: true }],
           })(
-            <Select style={{ width: '100%' }}>
+            <Select style={{ width: '100%' }} placeholder="请选择">
               {results.map(item => (
                 <Option key={item.shitId} value={item.shitId}>
                   {item.realName}
