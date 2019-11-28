@@ -41,11 +41,6 @@ class OrderList extends Component {
     remark: '',
     record: {},
   };
-  p = {
-    pageNum: 1,
-    pageSize: 10,
-    total: 0, //总条数
-  };
 
   columns = [
     { title: '订单号', key: 'orderNo', dataIndex: 'orderNo', width: 240, render: (val, record) => <a onClick={() => this.handleDetailsModal(true, record)}>{val}</a>, },
@@ -137,27 +132,20 @@ class OrderList extends Component {
     });
   };
   // 查询
-  handleSearch = () => {
+  handleSearch = (e) => {
+    e.preventDefault();
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      const values = {
-        ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      };
-      this.setState({
-        formValues: values,
-      });
-      this.fetchListData(values);
+      this.setState({ formValues: fieldsValue });
+      this.fetchListData(fieldsValue);
     });
   };
   // 重置
   handleFormReset = () => {
     const { form } = this.props;
     form.resetFields();
-    this.setState({
-      formValues: {},
-    });
+    this.setState({ formValues: {} });
     this.fetchListData();
   };
 
@@ -325,14 +313,15 @@ class OrderList extends Component {
   // 切换页码
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { formValues } = this.state;
+    const { current, pageSize } = pagination;
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
       newObj[key] = getValue(filtersArg[key]);
       return newObj;
     }, {});
     const params = {
-      currentPage: pagination.current,
-      pageSize: pagination.pageSize,
+      currentPage: parseInt(current),
+      pageSize: parseInt(pageSize),
       ...formValues,
       ...filters,
     };
@@ -345,13 +334,7 @@ class OrderList extends Component {
   };
 
   render() {
-    const {
-      orders: {
-        listData: { results },
-      },
-      loading,
-    } = this.props;
-    this.p.total = results ? results.recordSum : 10;
+    const { orders: { listData: { results }, }, loading, } = this.props;
     const { recordList = [] } = results || {};
     const { detailsModalVisible, modalVisible, updateModalVisible, stepFormValues, record } = this.state;
     const parentMethods = {
@@ -379,8 +362,9 @@ class OrderList extends Component {
               pagination={{
                 showQuickJumper: true,
                 showSizeChanger: true,
-                pageSize: this.p.pageSize || 1,
-                total: this.p.total,
+                current: (results && results.currentPage) || 1,
+                pageSize: (results && results.pageSize) || 10,
+                total: (results && results.recordSum) || 0,
                 showTotal: t => <div>共{t}条</div>,
               }}
             />

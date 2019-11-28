@@ -66,7 +66,7 @@ class PetkindList extends Component {
       align: 'center',
       render: (text, record) => (
         <span>
-          <a  onClick={() => this.handleModalVisible(true, record)}>
+          <a onClick={() => this.handleModalVisible(true, record)}>
             编辑
           </a>
           <Divider type="vertical" />
@@ -209,6 +209,7 @@ class PetkindList extends Component {
               loading={loading}
               columns={this.columns}
               dataSource={petKindList}
+              pagination={false}
             />
           </div>
         </Card>
