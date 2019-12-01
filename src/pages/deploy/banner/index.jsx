@@ -61,9 +61,7 @@ class BannerList extends Component {
       align: 'center',
       render: (text, record) => (
         <span>
-          <a  onClick={() => this.handleModalVisible(true, record)}>
-            编辑
-          </a>
+          <a onClick={() => this.handleModalVisible(true, record)}>编辑</a>
           <Divider type="vertical" />
           <Popconfirm
             title="确定要删除？"
@@ -71,7 +69,7 @@ class BannerList extends Component {
             onConfirm={() => this.deleteFunc(record)}
             icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
           >
-            <a >删除</a>
+            <a>删除</a>
           </Popconfirm>
         </span>
       ),
@@ -160,7 +158,7 @@ class BannerList extends Component {
               })(
                 <Select style={{ width: '100%' }}>
                   <Option value="top">顶部</Option>
-                  <Option value="buttom">底部</Option>
+                  <Option value="bottom">底部</Option>
                 </Select>,
               )}
             </FormItem>
