@@ -147,6 +147,7 @@ class BannerList extends Component {
   renderForm() {
     const {
       form: { getFieldDecorator },
+      deploy: { position },
     } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
@@ -154,7 +155,7 @@ class BannerList extends Component {
           <Col md={8} sm={24}>
             <FormItem label="展示位置">
               {getFieldDecorator('position', {
-                initialValue: 'top',
+                initialValue: position,
               })(
                 <Select style={{ width: '100%' }}>
                   <Option value="top">顶部</Option>

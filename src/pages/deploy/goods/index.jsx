@@ -218,6 +218,7 @@ class GoodsList extends Component {
   renderForm() {
     const {
       form: { getFieldDecorator },
+      goods: { classification, goodsType },
     } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
@@ -225,7 +226,7 @@ class GoodsList extends Component {
           <Col md={8} sm={24}>
             <FormItem label="分类">
               {getFieldDecorator('classification', {
-                initialValue: '0',
+                initialValue: `${classification}`,
               })(
                 <Select style={{ width: '100%' }}>
                   <Option value="0">上门喂猫</Option>
@@ -237,7 +238,7 @@ class GoodsList extends Component {
           <Col md={8} sm={24}>
             <FormItem label="商品类型">
               {getFieldDecorator('goodsType', {
-                initialValue: '0',
+                initialValue: `${goodsType}`,
               })(
                 <Select style={{ width: '100%' }}>
                   <Option value="0">可选数量</Option>

@@ -140,6 +140,7 @@ class DictList extends Component {
   renderForm() {
     const {
       form: { getFieldDecorator },
+      dictType,
       dictSelData = [],
     } = this.props;
     return (
@@ -148,7 +149,7 @@ class DictList extends Component {
           <Col md={8} sm={24}>
             <FormItem label="配置类型">
               {getFieldDecorator('dictType', {
-                initialValue: '3',
+                initialValue: dictType,
               })(
                 <Select style={{ width: '100%' }} placeholder="请选择">
                   {dictSelData.map(item => (

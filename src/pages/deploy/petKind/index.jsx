@@ -152,6 +152,7 @@ class PetkindList extends Component {
   renderForm() {
     const {
       form: { getFieldDecorator },
+      pet: { petType },
     } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
@@ -159,7 +160,7 @@ class PetkindList extends Component {
           <Col md={8} sm={24}>
             <FormItem label="宠物类型">
               {getFieldDecorator('petType', {
-                initialValue: '0',
+                initialValue: `${petType}`,
               })(
                 <Select style={{ width: '100%' }}>
                   <Option value="0">猫咪</Option>

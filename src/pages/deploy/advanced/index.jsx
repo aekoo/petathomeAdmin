@@ -71,7 +71,7 @@ class AdvancedList extends Component {
       align: 'center',
       render: (text, record) => (
         <span>
-          <a  onClick={() => this.handleModalVisible(true, record)}>
+          <a onClick={() => this.handleModalVisible(true, record)}>
             编辑
           </a>
           <Divider type="vertical" />
@@ -157,6 +157,7 @@ class AdvancedList extends Component {
   renderForm() {
     const {
       form: { getFieldDecorator },
+      pet: { serverType },
     } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
@@ -164,7 +165,7 @@ class AdvancedList extends Component {
           <Col md={8} sm={24}>
             <FormItem label="服务类型">
               {getFieldDecorator('serverType', {
-                initialValue: '0',
+                initialValue: `${serverType}`,
               })(
                 <Select style={{ width: '100%' }}>
                   <Option value="0">上门喂猫</Option>
