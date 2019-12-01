@@ -1,4 +1,20 @@
-import { Badge, Button, Card, Col, Divider, Form, Input, Icon, Table, Row, Rate, Select, Popover, Popconfirm, message, } from 'antd';
+import {
+  Badge,
+  Button,
+  Card,
+  Col,
+  Divider,
+  Form,
+  Input,
+  Icon,
+  Table,
+  Row,
+  Rate,
+  Select,
+  Popover,
+  Popconfirm,
+  message,
+} from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
@@ -43,38 +59,64 @@ class OrderList extends Component {
   };
 
   columns = [
-    { title: '订单号', key: 'orderNo', dataIndex: 'orderNo', width: 240, render: (val, record) => <a onClick={() => this.handleDetailsModal(true, record)}>{val}</a>, },
-    { title: '服务类别', key: 'serverType', dataIndex: 'serverType', render: val => serverType[val], },
-    { title: '服务地址', key: 'address', dataIndex: 'address', },
-    { title: '服务日期', key: 'serverDate', dataIndex: 'serverDate', },
+    {
+      title: '订单号',
+      key: 'orderNo',
+      dataIndex: 'orderNo',
+      width: 240,
+      render: (val, record) => <a onClick={() => this.handleDetailsModal(true, record)}>{val}</a>,
+    },
+    {
+      title: '服务类别',
+      key: 'serverType',
+      dataIndex: 'serverType',
+      render: val => serverType[val],
+    },
+    { title: '服务地址', key: 'address', dataIndex: 'address' },
+    { title: '服务日期', key: 'serverDate', dataIndex: 'serverDate' },
     // { title: '服务时间', key: 'serverPeriod', dataIndex: 'serverPeriod', },
     // { title: '服务时长', key: 'serverDuration', dataIndex: 'serverDuration', },
     // { title: '宠物数量', key: 'petNumber', dataIndex: 'petNumber', },
     // { title: '宠物', key: 'petIds', dataIndex: 'petIds', },
     // { title: '高级服务', key: 'petIds', dataIndex: 'petIds', },
     // { title: '钥匙交接', key: 'keyHandover', dataIndex: 'keyHandover', },
-    { title: '订单金额', key: 'totalMoney', dataIndex: 'totalMoney', render: text => `${text} 元`, },
+    { title: '订单金额', key: 'totalMoney', dataIndex: 'totalMoney', render: text => `${text} 元` },
     {
-      title: '支付状态', key: 'payStatus', dataIndex: 'payStatus',
-      render: text => text == '-1' ? <Badge status="error" text="支付失败" /> : <Badge status={payStatusMap[text]} text={payStatus[text]} />
-
+      title: '支付状态',
+      key: 'payStatus',
+      dataIndex: 'payStatus',
+      render: text =>
+        text == '-1' ? (
+          <Badge status="error" text="支付失败" />
+        ) : (
+          <Badge status={payStatusMap[text]} text={payStatus[text]} />
+        ),
     },
     {
-      title: '爱宠官', key: 'lovePetOfficerName', dataIndex: 'lovePetOfficerName',
-      render: (text, record) => text ? text : <a onClick={() => this.handleModalVisible(true, record)}>未分配</a>,
+      title: '爱宠官',
+      key: 'lovePetOfficerName',
+      dataIndex: 'lovePetOfficerName',
+      render: (text, record) =>
+        text ? text : <a onClick={() => this.handleModalVisible(true, record)}>未分配</a>,
     },
     {
-      title: '服务状态', key: 'serverStatus', dataIndex: 'serverStatus',
-      render: (text) => <Badge status={serverStatusMap[text]} text={serverStatus[text]} />
+      title: '服务状态',
+      key: 'serverStatus',
+      dataIndex: 'serverStatus',
+      render: text => <Badge status={serverStatusMap[text]} text={serverStatus[text]} />,
     },
     {
-      title: '备注', key: 'remark', dataIndex: 'remark',
+      title: '备注',
+      key: 'remark',
+      dataIndex: 'remark',
       render: (text, record) => this.renderRemark(record),
     },
     {
-      title: '评价', key: 'evaluationStatus', dataIndex: 'evaluationStatus',
+      title: '评价',
+      key: 'evaluationStatus',
+      dataIndex: 'evaluationStatus',
       render: (text, record) =>
-        text == 1 ?
+        text == 1 ? (
           <Popover
             title="评价信息"
             trigger="click"
@@ -88,35 +130,41 @@ class OrderList extends Component {
           >
             <a>已评价</a>
           </Popover>
-          :
+        ) : (
           '未评价'
+        ),
     },
     {
-      title: '操作', dataIndex: 'action',
-      render: (val, record) =>
+      title: '操作',
+      dataIndex: 'action',
+      render: (val, record) => (
         <span>
           {/* <a onClick={() => this.handleDetailsModal(true, record)}>详情</a> */}
-          {
-            record.payStatus == '2' ?
-              <>
-                <Divider type="vertical" />
-                <Popconfirm
-                  title="确定退款吗?"
-                  icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
-                  okType="danger"
-                  onConfirm={() => this.confirmRefund(record.orderNo)}
-                >
-                  <Button type="danger" ghost style={{ marginLeft: 16 }}>退款</Button>
-                </Popconfirm>
-              </>
-              : null
-          }
+          {record.payStatus == '2' ? (
+            <>
+              {/* <Divider type="vertical" /> */}
+              <Popconfirm
+                title="确定退款吗?"
+                icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
+                okType="danger"
+                onConfirm={() => this.confirmRefund(record.orderNo)}
+              >
+                <Button type="danger" ghost style={{ marginLeft: 16 }}>
+                  退款
+                </Button>
+              </Popconfirm>
+            </>
+          ) : null}
         </span>
+      ),
     },
   ];
 
   componentDidMount() {
-    const { form, location: { query = {} }, } = this.props;
+    const {
+      form,
+      location: { query = {} },
+    } = this.props;
     if (query.lovePetOfficerName) {
       form.setFieldsValue({ lovePetOfficerName: query.lovePetOfficerName });
       this.handleSearch();
@@ -132,8 +180,10 @@ class OrderList extends Component {
     });
   };
   // 查询
-  handleSearch = (e) => {
-    e.preventDefault();
+  handleSearch = e => {
+    if (e) {
+      e.preventDefault();
+    }
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -172,7 +222,6 @@ class OrderList extends Component {
     this.handleModalVisible();
   };
 
-
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
@@ -200,6 +249,9 @@ class OrderList extends Component {
     dispatch({
       type: 'orders/confirmRefund',
       payload: { orderNo },
+      callback: response => {
+        this.handleSearch();
+      },
     });
   };
   // 编辑备注
@@ -334,9 +386,20 @@ class OrderList extends Component {
   };
 
   render() {
-    const { orders: { listData: { results }, }, loading, } = this.props;
+    const {
+      orders: {
+        listData: { results },
+      },
+      loading,
+    } = this.props;
     const { recordList = [] } = results || {};
-    const { detailsModalVisible, modalVisible, updateModalVisible, stepFormValues, record } = this.state;
+    const {
+      detailsModalVisible,
+      modalVisible,
+      updateModalVisible,
+      stepFormValues,
+      record,
+    } = this.state;
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,

@@ -20,23 +20,29 @@ const EmployeeModel = {
         payload: response,
       });
     },
-    *updateRemark({ payload }, { call, put }) {
+    *updateRemark({ payload, callback }, { call, put }) {
       const response = yield call(updateRemark, payload);
       if (response.code !== 1) {
         return message.error(response.desc);
       }
-      yield put({
-        type: 'fetchEmployee',
-      });
+      // yield put({
+      //   type: 'fetchEmployee',
+      // });
+      if (callback && typeof callback === 'function') {
+        callback(response);
+      }
     },
-    *updateReview({ payload }, { call, put }) {
+    *updateReview({ payload, callback }, { call, put }) {
       const response = yield call(updateReview, payload);
       if (response.code !== 1) {
         return message.error(response.desc);
       }
-      yield put({
-        type: 'fetchEmployee',
-      });
+      // yield put({
+      //   type: 'fetchEmployee',
+      // });
+      if (callback && typeof callback === 'function') {
+        callback(response);
+      }
     },
     *fetchEmployeeDetail({ payload }, { call, put }) {
       const response = yield call(queryEmployeeDetail, payload);

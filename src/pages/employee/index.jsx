@@ -1,4 +1,18 @@
-import { Badge, Button, Card, Col, Input, Form, Cascader, Table, Row, Select, Popconfirm, Popover, message, } from 'antd';
+import {
+  Badge,
+  Button,
+  Card,
+  Col,
+  Input,
+  Form,
+  Cascader,
+  Table,
+  Row,
+  Select,
+  Popconfirm,
+  Popover,
+  message,
+} from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
@@ -88,15 +102,19 @@ class EmployeeList extends Component {
       //   (
       //     text > 0 ? <a onClick={() => this.handleDrawerVisible(true, record.orders)}>{text}</a> : text
       //   ) || '-',
-      render: (text, record) => text > 0 ? <Link to={`/orders?lovePetOfficerName=${record.realName}`}>{text}</Link> : text
+      render: (text, record) =>
+        text > 0 ? <Link to={`/orders?lovePetOfficerName=${record.realName}`}>{text}</Link> : text,
     },
     {
       title: '待服务订单',
       dataIndex: 'pendingServiceNumber',
       width: 120,
-      render: (text, record) => (
-        text > 0 ? <a onClick={() => this.handleDrawerVisible(true, record.pendingServiceOrders)}>{text}</a> : text
-      ) || '-',
+      render: (text, record) =>
+        (text > 0 ? (
+          <a onClick={() => this.handleDrawerVisible(true, record.pendingServiceOrders)}>{text}</a>
+        ) : (
+          text
+        )) || '-',
     },
     {
       title: '审核状态',
@@ -114,11 +132,7 @@ class EmployeeList extends Component {
       dataIndex: 'desc',
       width: 100,
       align: 'center',
-      render: (text, record) => (
-        <a onClick={() => this.handleModalVisible(true, record)}>
-          查看
-        </a>
-      ),
+      render: (text, record) => <a onClick={() => this.handleModalVisible(true, record)}>查看</a>,
     },
   ];
 
@@ -134,7 +148,9 @@ class EmployeeList extends Component {
   };
   // 查询
   handleSearch = e => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -187,6 +203,9 @@ class EmployeeList extends Component {
     dispatch({
       type: 'employee/updateReview',
       payload: { shitId: editStatus, status },
+      callback: response => {
+        this.handleSearch();
+      },
     });
     this.setState({ editStatus: '', status: '' });
   };
@@ -197,6 +216,9 @@ class EmployeeList extends Component {
     dispatch({
       type: 'employee/updateRemark',
       payload: { shitId: editRemark, remark },
+      callback: response => {
+        this.handleSearch();
+      },
     });
     this.setState({ editRemark: '', remark: '' });
   };
@@ -259,12 +281,12 @@ class EmployeeList extends Component {
         </Row>
       </Form>
     ) : (
-        <Badge
-          status={statusMap[approvalStatus]}
-          text={approvalStatusMap[approvalStatus]}
-          onClick={() => this.setState({ editStatus: shitId, status: approvalStatus })}
-        />
-      );
+      <Badge
+        status={statusMap[approvalStatus]}
+        text={approvalStatusMap[approvalStatus]}
+        onClick={() => this.setState({ editStatus: shitId, status: approvalStatus })}
+      />
+    );
   }
   // 编辑备注
   renderRemark(record) {
@@ -335,7 +357,7 @@ class EmployeeList extends Component {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="地区">
-              {getFieldDecorator('cascader', { initialValue: '' })(
+              {getFieldDecorator('cascader', { initialValue: [''] })(
                 <Cascader options={cascaderData} placeholder="请选择" />,
               )}
             </FormItem>

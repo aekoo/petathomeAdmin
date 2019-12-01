@@ -42,9 +42,12 @@ const OrderModel = {
       if (response.code !== 1) {
         return message.error(response.desc);
       }
-      yield put({
-        type: 'fetch',
-      });
+      // yield put({
+      //   type: 'fetch',
+      // });
+      if (callback && typeof callback === 'function') {
+        callback(response);
+      }
     },
   },
   reducers: {
