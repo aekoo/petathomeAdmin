@@ -19,10 +19,10 @@ class CreateForm extends Component {
   componentDidMount() {
     const { record, form } = this.props;
     if (record) {
-      const { bannerId, image, link, remark, display } = record;
+      const { bannerId, image, position, link, remark, display } = record;
       this.setState({ bannerId, imageUrl: image });
       // form.setFieldsValue({ image, link, remark, display });
-      form.setFieldsValue({ image, link, remark });
+      form.setFieldsValue({ image, position, link, remark });
     }
   }
 
