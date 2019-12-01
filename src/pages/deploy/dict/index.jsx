@@ -1,4 +1,16 @@
-import { Row, Col, Button, Card, Divider, Form, Table, Icon, Select, Popconfirm, message } from 'antd';
+import {
+  Row,
+  Col,
+  Button,
+  Card,
+  Divider,
+  Form,
+  Table,
+  Icon,
+  Select,
+  Popconfirm,
+  message,
+} from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
@@ -24,8 +36,11 @@ class DictList extends Component {
   columns = [
     { title: 'Dict ID', dataIndex: 'dictId', width: 300 },
     {
-      title: 'Dict 名称', dataIndex: 'dictName', width: 200,
-      render: (text, record) => record.dictType == 3 ? <a  onClick={() => this.childrenTable(record)}>{text}</a> : text
+      title: 'Dict 名称',
+      dataIndex: 'dictName',
+      width: 200,
+      render: (text, record) =>
+        record.dictType == 3 ? <a onClick={() => this.childrenTable(record)}>{text}</a> : text,
     },
     { title: 'Dict 值', dataIndex: 'dictValue' },
     { title: '创建时间', dataIndex: 'createTime' },
@@ -35,20 +50,21 @@ class DictList extends Component {
       dataIndex: 'action',
       width: 200,
       align: 'center',
-      render: (text, record) => (
-        <span>
-          <a  onClick={() => this.handleModalVisible(true, record)}>编辑</a>
-          <Divider type="vertical" />
-          <Popconfirm
-            title="确定要删除？"
-            okType="danger"
-            onConfirm={() => this.deleteFunc(record)}
-            icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
-          >
-            <a >删除</a>
-          </Popconfirm>
-        </span>
-      ),
+      render: (text, record) =>
+        record.dictId != 3 ? (
+          <span>
+            <a onClick={() => this.handleModalVisible(true, record)}>编辑</a>
+            <Divider type="vertical" />
+            <Popconfirm
+              title="确定要删除？"
+              okType="danger"
+              onConfirm={() => this.deleteFunc(record)}
+              icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
+            >
+              <a>删除</a>
+            </Popconfirm>
+          </span>
+        ) : null,
     },
   ];
 
@@ -96,7 +112,7 @@ class DictList extends Component {
       payload: dictId,
     });
     this.fetchListData();
-  }
+  };
 
   // 查询
   handleSearch = e => {
@@ -122,7 +138,10 @@ class DictList extends Component {
     this.fetchListData();
   };
   renderForm() {
-    const { form: { getFieldDecorator }, dictSelData = [] } = this.props;
+    const {
+      form: { getFieldDecorator },
+      dictSelData = [],
+    } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -132,9 +151,11 @@ class DictList extends Component {
                 initialValue: '3',
               })(
                 <Select style={{ width: '100%' }} placeholder="请选择">
-                  {
-                    dictSelData.map(item => <Option key={item.dictId} value={item.dictValue}>{item.dictName}</Option>)
-                  }
+                  {dictSelData.map(item => (
+                    <Option key={item.dictId} value={item.dictValue}>
+                      {item.dictName}
+                    </Option>
+                  ))}
                 </Select>,
               )}
             </FormItem>
@@ -154,7 +175,12 @@ class DictList extends Component {
     );
   }
   render() {
-    const { dictType, dictData: { results }, dictSelData, loading, } = this.props;
+    const {
+      dictType,
+      dictData: { results },
+      dictSelData,
+      loading,
+    } = this.props;
     const { modalVisible, record } = this.state;
 
     let recordList = [];
