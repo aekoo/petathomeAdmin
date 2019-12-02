@@ -1,4 +1,4 @@
-import { Badge, Card, Form, Table, message } from 'antd';
+import { Badge, Card, Form, Table, Modal } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
@@ -14,7 +14,7 @@ const whether = ['否', '是'];
   loading: loading.models.pet,
 }))
 class PetList extends Component {
-  state = {};
+  state = { modalVisible: false };
 
   componentDidMount() {
     this.fetchListData();
@@ -39,11 +39,20 @@ class PetList extends Component {
     });
   };
 
+
+  handleModalVisible = (flag, record) => {
+    this.setState({
+      modalVisible: !!flag,
+      peview: record || '',
+    });
+  };
+
   render() {
     const {
       pet: { listData, petKindList },
       loading,
     } = this.props;
+    const { modalVisible, peview } = this.state;
 
     let kinds = {};
     petKindList.map(item => {
@@ -57,7 +66,7 @@ class PetList extends Component {
         title: '头像',
         dataIndex: 'avatar',
         width: 100,
-        render: val => (val ? <img style={{ width: 40, height: 40 }} src={val} /> : '无'),
+        render: val => (val ? <img style={{ width: 40, height: 40 }} src={val} onClick={() => this.handleModalVisible(true, val)} /> : '无'),
       },
       { title: '昵称', dataIndex: 'nickName', width: 180 },
       { title: '生日', dataIndex: 'birthday', width: 150 },
@@ -99,7 +108,7 @@ class PetList extends Component {
           return val ? (
             <div>
               {photoList.map(item => (
-                <img style={{ width: 80, height: 80 }} src={item} />
+                <img style={{ width: 80, height: 80 }} src={item} onClick={() => this.handleModalVisible(true, item)} />
               ))}
             </div>
           ) : (
@@ -120,6 +129,15 @@ class PetList extends Component {
             dataSource={listData}
           />
         </Card>
+        <Modal
+          destroyOnClose
+          title=""
+          visible={modalVisible}
+          footer={null}
+          onCancel={() => this.handleModalVisible()}
+        >
+          <img style={{ width: 450, height: 400 }} src={peview} />
+        </Modal>
       </PageHeaderWrapper>
     );
   }

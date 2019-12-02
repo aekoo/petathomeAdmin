@@ -61,24 +61,24 @@ class Details extends Component {
         onOk={() => handleModalVisible()}
         onCancel={() => handleModalVisible()}
       >
-        <Descriptions layout="vertical" bordered>
-          <Descriptions.Item label="ID">{shitId}</Descriptions.Item>
-          <Descriptions.Item label="姓名">{realName}</Descriptions.Item>
-          <Descriptions.Item label="微信号">{wechatNo}</Descriptions.Item>
-          <Descriptions.Item label="性别">{sexType[gender]}</Descriptions.Item>
-          <Descriptions.Item label="年龄">{age}</Descriptions.Item>
+        <Descriptions size="small" bordered>
+          <Descriptions.Item label="ID" span={3}>{shitId}</Descriptions.Item>
+          <Descriptions.Item label="姓名" span={3}>{realName}</Descriptions.Item>
+          <Descriptions.Item label="微信号" span={3}>{wechatNo}</Descriptions.Item>
+          <Descriptions.Item label="性别" span={3}>{sexType[gender]}</Descriptions.Item>
+          <Descriptions.Item label="年龄" span={3}>{age}</Descriptions.Item>
 
-          <Descriptions.Item label="地区">{residentArea}</Descriptions.Item>
-          <Descriptions.Item label="学历">{educationArray[education]}</Descriptions.Item>
-          <Descriptions.Item label="工作状况">{workingStatus}</Descriptions.Item>
-          <Descriptions.Item label="类型">{serveType[serve]}</Descriptions.Item>
-          <Descriptions.Item label="是否有养宠物">{hasPet}</Descriptions.Item>
+          <Descriptions.Item label="地区" span={3}>{residentArea}</Descriptions.Item>
+          <Descriptions.Item label="学历" span={3}>{educationArray[education]}</Descriptions.Item>
+          <Descriptions.Item label="工作状况" span={3}>{workingStatus}</Descriptions.Item>
+          <Descriptions.Item label="类型" span={3}>{serveType[serve]}</Descriptions.Item>
+          <Descriptions.Item label="是否有养宠物" span={3}>{hasPet}</Descriptions.Item>
 
-          <Descriptions.Item label="是否接种狂犬">{vaccination}</Descriptions.Item>
-          <Descriptions.Item label="可服务时间">{canServerTime}</Descriptions.Item>
-          <Descriptions.Item label="创建时间">{createTime}</Descriptions.Item>
-          <Descriptions.Item label="更新时间">{updateTime}</Descriptions.Item>
-          <Descriptions.Item label="审核状态">
+          <Descriptions.Item label="是否接种狂犬" span={3}>{vaccination}</Descriptions.Item>
+          <Descriptions.Item label="可服务时间" span={3}>{canServerTime}</Descriptions.Item>
+          <Descriptions.Item label="创建时间" span={3}>{createTime}</Descriptions.Item>
+          <Descriptions.Item label="更新时间" span={3}>{updateTime}</Descriptions.Item>
+          <Descriptions.Item label="审核状态" span={3}>
             {approvalStatusMap[approvalStatus]}
           </Descriptions.Item>
         </Descriptions>
