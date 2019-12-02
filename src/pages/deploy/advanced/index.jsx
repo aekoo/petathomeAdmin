@@ -35,12 +35,12 @@ class AdvancedList extends Component {
   };
 
   columns = [
-    { title: '服务ID', dataIndex: 'serverId', width: 200 },
-    { title: '服务名称', dataIndex: 'serverName', width: 200 },
+    { title: '服务ID', dataIndex: 'serverId', width: 150 },
+    { title: '服务名称', dataIndex: 'serverName', width: 150 },
     {
       title: '服务类型',
       dataIndex: 'serverType',
-      width: 200,
+      width: 150,
       render: text => typeMap[text],
     },
     {
@@ -211,6 +211,7 @@ class AdvancedList extends Component {
               </Button>
             </div>
             <Table
+              scroll={{ x: 1300 }}
               rowKey={record => record.serverId}
               loading={loading}
               columns={this.columns}

@@ -209,6 +209,7 @@ class DictList extends Component {
               </Button>
             </div>
             <Table
+              scroll={{ x: 1300 }}
               rowKey={record => record.dictId}
               loading={loading}
               columns={this.columns}

@@ -136,6 +136,7 @@ class NoticeList extends Component {
               </Button>
             </div>
             <Table
+              // scroll={{ x: 1300 }}
               rowKey={record => record.textId}
               loading={loading}
               columns={this.columns}

@@ -205,6 +205,7 @@ class BannerList extends Component {
               </Button>
             </div>
             <Table
+              scroll={{ x: 1300 }}
               rowKey={record => record.bannerId}
               loading={loading}
               columns={this.columns}

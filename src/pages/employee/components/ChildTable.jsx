@@ -53,6 +53,7 @@ class ChildTable extends Component {
         visible={true}
       >
         <Table
+          // scroll={{ x: 1300 }}
           rowKey={record => record.orderNo}
           columns={this.columns}
           dataSource={data}

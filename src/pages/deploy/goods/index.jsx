@@ -280,6 +280,7 @@ class GoodsList extends Component {
               </Button>
             </div>
             <Table
+              scroll={{ x: 1300 }}
               rowKey={record => record.goodsId}
               loading={loading}
               columns={classification == 0 ? this.columns1 : this.columns2}

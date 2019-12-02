@@ -128,6 +128,7 @@ class CustomerList extends Component {
       <PageHeaderWrapper>
         <Card bordered={false}>
           <Table
+            scroll={{ x: 1300 }}
             rowKey={record => record.userId}
             loading={loading}
             columns={this.columns}

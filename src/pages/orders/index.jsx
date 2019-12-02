@@ -60,61 +60,56 @@ class OrderList extends Component {
 
   columns = [
     {
-      title: '订单号',
-      key: 'orderNo',
-      dataIndex: 'orderNo',
-      width: 240,
+      title: '订单号', key: 'orderNo', dataIndex: 'orderNo', width: 260, fixed: 'left', ellipsis: true,
       render: (val, record) => <a onClick={() => this.handleDetailsModal(true, record)}>{val}</a>,
     },
     {
-      title: '服务类别',
-      key: 'serverType',
-      dataIndex: 'serverType',
+      title: '服务类别', key: 'serverType', dataIndex: 'serverType', width: 100,
       render: val => serverType[val],
     },
-    { title: '服务地址', key: 'address', dataIndex: 'address' },
-    { title: '服务日期', key: 'serverDate', dataIndex: 'serverDate' },
+    { title: '服务地址', key: 'address', dataIndex: 'address', width: 350, ellipsis: true, },
+    {
+      title: '服务日期', key: 'serverDate', dataIndex: 'serverDate', width: 150,
+      render: (text) => {
+        let serverDate = text.split(',');
+        let len = serverDate.length;
+        return (<span>{len > 1 ? `${serverDate[0]} 等${len}天` : serverDate[0]}</span>)
+      }
+    },
     // { title: '服务时间', key: 'serverPeriod', dataIndex: 'serverPeriod', },
     // { title: '服务时长', key: 'serverDuration', dataIndex: 'serverDuration', },
     // { title: '宠物数量', key: 'petNumber', dataIndex: 'petNumber', },
     // { title: '宠物', key: 'petIds', dataIndex: 'petIds', },
     // { title: '高级服务', key: 'petIds', dataIndex: 'petIds', },
     // { title: '钥匙交接', key: 'keyHandover', dataIndex: 'keyHandover', },
-    { title: '订单金额', key: 'totalMoney', dataIndex: 'totalMoney', render: text => `${text} 元` },
     {
-      title: '支付状态',
-      key: 'payStatus',
-      dataIndex: 'payStatus',
+      title: '订单金额', key: 'totalMoney', dataIndex: 'totalMoney', width: 100,
+      render: text => `${text} 元`
+    },
+    {
+      title: '支付状态', key: 'payStatus', dataIndex: 'payStatus', width: 100,
       render: text =>
         text == '-1' ? (
           <Badge status="error" text="支付失败" />
         ) : (
-          <Badge status={payStatusMap[text]} text={payStatus[text]} />
-        ),
+            <Badge status={payStatusMap[text]} text={payStatus[text]} />
+          ),
     },
     {
-      title: '爱宠官',
-      key: 'lovePetOfficerName',
-      dataIndex: 'lovePetOfficerName',
+      title: '爱宠官', key: 'lovePetOfficerName', dataIndex: 'lovePetOfficerName', width: 100,
       render: (text, record) =>
         text ? text : <a onClick={() => this.handleModalVisible(true, record)}>未分配</a>,
     },
     {
-      title: '服务状态',
-      key: 'serverStatus',
-      dataIndex: 'serverStatus',
+      title: '服务状态', key: 'serverStatus', dataIndex: 'serverStatus', width: 100,
       render: text => <Badge status={serverStatusMap[text]} text={serverStatus[text]} />,
     },
     {
-      title: '备注',
-      key: 'remark',
-      dataIndex: 'remark',
+      title: '备注', key: 'remark', dataIndex: 'remark', width: 150, ellipsis: true,
       render: (text, record) => this.renderRemark(record),
     },
     {
-      title: '评价',
-      key: 'evaluationStatus',
-      dataIndex: 'evaluationStatus',
+      title: '评价', key: 'evaluationStatus', dataIndex: 'evaluationStatus', width: 100,
       render: (text, record) =>
         text == 1 ? (
           <Popover
@@ -131,12 +126,11 @@ class OrderList extends Component {
             <a>已评价</a>
           </Popover>
         ) : (
-          '未评价'
-        ),
+            '未评价'
+          ),
     },
     {
-      title: '操作',
-      dataIndex: 'action',
+      title: '操作', dataIndex: 'action', width: 100, fixed: 'right',
       render: (val, record) => (
         <span>
           {/* <a onClick={() => this.handleDetailsModal(true, record)}>详情</a> */}
@@ -417,6 +411,7 @@ class OrderList extends Component {
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
             <Table
+              scroll={{ x: 1300 }}
               rowKey={record => record.orderNo}
               loading={loading}
               columns={this.columns}

@@ -103,8 +103,8 @@ class PetList extends Component {
               ))}
             </div>
           ) : (
-            '-'
-          );
+              '-'
+            );
         },
       },
     ];
@@ -113,6 +113,7 @@ class PetList extends Component {
       <PageHeaderWrapper title="宠物列表">
         <Card bordered={false}>
           <Table
+            scroll={{ x: 1300 }}
             rowKey={record => record.petId}
             loading={loading}
             columns={columns}

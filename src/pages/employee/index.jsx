@@ -125,6 +125,7 @@ class EmployeeList extends Component {
     {
       title: '备注',
       dataIndex: 'remark',
+      width: 200,
       render: (text, record) => this.renderRemark(record),
     },
     {
@@ -397,6 +398,7 @@ class EmployeeList extends Component {
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
             <Table
+              scroll={{ x: 1300 }}
               rowKey={record => record.shitId}
               loading={loading}
               columns={this.columns}

@@ -80,6 +80,7 @@ class VisitingService extends Component {
       <PageHeaderWrapper>
         <Card bordered={false}>
           <Table
+            // scroll={{ x: 1300 }}
             rowKey={record => record.dictId}
             loading={loading}
             columns={this.columns}

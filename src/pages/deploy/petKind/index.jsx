@@ -35,15 +35,13 @@ class PetkindList extends Component {
   };
 
   columns = [
-    { title: '品种ID', dataIndex: 'kindId', width: 400 },
+    { title: '品种ID', dataIndex: 'kindId', width: 300 },
     { title: '品种名称', dataIndex: 'petName', width: 200 },
     {
-      title: '宠物种类',
-      dataIndex: 'petType',
-      width: 200,
+      title: '宠物种类', dataIndex: 'petType', width: 150,
       render: text => petTypeMap[text],
     },
-    { title: '排序', dataIndex: 'sort', width: 200 },
+    { title: '排序', dataIndex: 'sort', width: 100 },
     {
       title: '是否启用',
       dataIndex: 'shelf',
@@ -206,6 +204,7 @@ class PetkindList extends Component {
               </Button>
             </div>
             <Table
+              scroll={{ x: 1300 }}
               rowKey={record => record.kindId}
               loading={loading}
               columns={this.columns}
