@@ -129,6 +129,7 @@ class OrderList extends Component {
             '未评价'
           ),
     },
+    { title: '下单时间', key: 'createTime', dataIndex: 'createTime', width: 200, },
     {
       title: '操作', dataIndex: 'action', width: 100, fixed: 'right',
       render: (val, record) => (
