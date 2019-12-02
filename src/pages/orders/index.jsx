@@ -60,14 +60,14 @@ class OrderList extends Component {
 
   columns = [
     {
-      title: '订单号', key: 'orderNo', dataIndex: 'orderNo', width: 260, fixed: 'left', ellipsis: true,
+      title: '订单号', key: 'orderNo', dataIndex: 'orderNo', width: 100, ellipsis: true,
       render: (val, record) => <a onClick={() => this.handleDetailsModal(true, record)}>{val}</a>,
     },
     {
       title: '服务类别', key: 'serverType', dataIndex: 'serverType', width: 100,
       render: val => serverType[val],
     },
-    { title: '服务地址', key: 'address', dataIndex: 'address', width: 350, ellipsis: true, },
+    { title: '服务地址', key: 'address', dataIndex: 'address', width: 260, ellipsis: true, },
     {
       title: '服务日期', key: 'serverDate', dataIndex: 'serverDate', width: 150,
       render: (text) => {
@@ -105,7 +105,7 @@ class OrderList extends Component {
       render: text => <Badge status={serverStatusMap[text]} text={serverStatus[text]} />,
     },
     {
-      title: '备注', key: 'remark', dataIndex: 'remark', width: 150, ellipsis: true,
+      title: '备注', key: 'remark', dataIndex: 'remark', width: 100, ellipsis: true,
       render: (text, record) => this.renderRemark(record),
     },
     {
