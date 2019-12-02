@@ -25,7 +25,7 @@ class Allocation extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'employee/fetchEmployee',
-      // payload: { approvalStatus: 2 },
+      payload: { approvalStatus: 2 },
     });
   };
 
