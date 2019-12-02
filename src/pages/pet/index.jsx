@@ -1,4 +1,4 @@
-import { Badge, Card, Form, Table, Modal } from 'antd';
+import { Avatar, Badge, Card, Form, Table, Modal } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
@@ -39,7 +39,6 @@ class PetList extends Component {
     });
   };
 
-
   handleModalVisible = (flag, record) => {
     this.setState({
       modalVisible: !!flag,
@@ -66,7 +65,17 @@ class PetList extends Component {
         title: '头像',
         dataIndex: 'avatar',
         width: 100,
-        render: val => (val ? <img style={{ width: 40, height: 40 }} src={val} onClick={() => this.handleModalVisible(true, val)} /> : '无'),
+        render: val =>
+          val ? (
+            <Avatar
+              size="large"
+              icon="user"
+              src={val}
+              onClick={() => this.handleModalVisible(true, val)}
+            />
+          ) : (
+            '无'
+          ),
       },
       { title: '昵称', dataIndex: 'nickName', width: 180 },
       { title: '生日', dataIndex: 'birthday', width: 150 },
@@ -103,17 +112,22 @@ class PetList extends Component {
       {
         title: '照片',
         dataIndex: 'photo',
+        width: 400,
         render: val => {
           const photoList = val ? val.split(',') : [];
           return val ? (
             <div>
               {photoList.map(item => (
-                <img style={{ width: 80, height: 80 }} src={item} onClick={() => this.handleModalVisible(true, item)} />
+                <img
+                  style={{ width: 60, height: 60, marginRight: 5 }}
+                  src={item}
+                  onClick={() => this.handleModalVisible(true, item)}
+                />
               ))}
             </div>
           ) : (
-              '-'
-            );
+            '-'
+          );
         },
       },
     ];
@@ -136,7 +150,7 @@ class PetList extends Component {
           footer={null}
           onCancel={() => this.handleModalVisible()}
         >
-          <img style={{ width: 450, height: 400 }} src={peview} />
+          <img style={{ width: 450 }} src={peview} />
         </Modal>
       </PageHeaderWrapper>
     );

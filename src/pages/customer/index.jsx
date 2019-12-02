@@ -37,7 +37,8 @@ class CustomerList extends Component {
     {
       title: '头像',
       dataIndex: 'avatar',
-      render: val => <Avatar size={64} icon="user" src={val} />,
+      // render: val => <Avatar size={64} icon="user" src={val} />,
+      render: val => <Avatar size="large" icon="user" src={val} />,
       width: 100,
     },
     {
