@@ -6,7 +6,7 @@ export default {
   'menu.orders': '订单管理',
   'menu.customer': '客户管理',
   'menu.customer.pet': '宠物列表',
-  'menu.sales': '活动管理',
+  'menu.activity': '活动管理',
   'menu.deploy': '配置管理',
   'menu.deploy.notice': '通知消息',
   'menu.deploy.banner': 'Banner',

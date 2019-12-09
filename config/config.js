@@ -128,14 +128,14 @@ export default {
               component: './customer/index',
             },
             {
-              path: '/sales',
-              name: 'sales',
+              path: '/activity',
+              name: 'activity',
               icon: 'history',
-              component: './sales/index',
+              component: './activity/index',
             },
             {
-              path: '/sales/orders',
-              component: './sales/orders',
+              path: '/activity/orders',
+              component: './activity/orders',
             },
             {
               path: '/deploy',
