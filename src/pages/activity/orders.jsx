@@ -40,11 +40,11 @@ class ActivityOrder extends Component {
     },
     { title: '服务地址', dataIndex: 'address', width: 260, ellipsis: true, },
     {
-      title: '订单金额', dataIndex: 'tradeMoney', width: 100,
+      title: '订单金额', dataIndex: 'totalMoney', width: 100,
       render: text => `${text} 元`
     },
     { title: '宠物数量', dataIndex: 'petNumber', width: 100, },
-    { title: '钥匙交接', dataIndex: 'keyHandover', width: 100, },
+    { title: '钥匙交接', dataIndex: 'keyHandover', width: 150, },
     {
       title: '订单状态', dataIndex: 'payStatus', width: 100,
       render: text => <Badge status={payStatusMap[text]} text={payStatus[text]} />
