@@ -18,9 +18,9 @@ class CreateForm extends Component {
     const { record, form } = this.props;
 
     if (record.activityId) {
-      const { activityId, title, price, num, description, startDate, endDate } = record;
+      const { activityId, title, totalPrice, num, description, startDate, endDate } = record;
       this.setState({ activityId });
-      form.setFieldsValue({ title, price, num, description, activityDate: startDate && endDate ? [moment(startDate, dateFormat), moment(endDate, dateFormat)] : [] });
+      form.setFieldsValue({ title, totalPrice, num, description, activityDate: startDate && endDate ? [moment(startDate, dateFormat), moment(endDate, dateFormat)] : [] });
     }
   }
 
@@ -70,7 +70,7 @@ class CreateForm extends Component {
           })(<RangePicker format={dateFormat} disabledDate={this.disabledDate} />)}
         </FormItem>
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="活动价格">
-          {form.getFieldDecorator('price', {
+          {form.getFieldDecorator('totalPrice', {
             rules: [{ required: true, pattern: /^(\d+|\d+\.\d{1,2})$/, message: '请输入数字,最多两位小数' }],
           })(<Input placeholder="请输入数字,最多两位小数" />)}
         </FormItem>
@@ -83,7 +83,7 @@ class CreateForm extends Component {
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="活动说明">
           {form.getFieldDecorator('description', {
             rules: [{ required: true, message: '请输入活动说明！' }],
-          })(<TextArea placeholder="请输入" rows={4} />)}
+          })(<TextArea placeholder="请输入" rows={8} />)}
         </FormItem>
       </Modal>
     );

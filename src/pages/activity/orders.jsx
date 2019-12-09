@@ -11,13 +11,15 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const serverType = ['上门喂猫', '上门遛狗'];
+const payStatusMap = ['warning', 'success', 'processing', 'purple', 'default'];
+const payStatus = ['待支付', '已支付', '已申请退款', '已退款', '已取消'];
 
 /* eslint react/no-multi-comp:0 */
 @connect(({ activity, loading }) => ({
-  activity,
+  orderData: activity.orderData.results,
   loading: loading.models.activity,
 }))
-class OrderList extends Component {
+class ActivityOrder extends Component {
   state = {
     detailsModalVisible: false,
     formValues: {},
@@ -28,31 +30,35 @@ class OrderList extends Component {
 
   columns = [
     {
-      title: '订单号', key: 'orderNo', width: 100, ellipsis: true,
-      render: (val, record) => <a onClick={() => this.handleDetailsModal(true, record)}>{val}</a>,
+      title: '订单号', dataIndex: 'orderNo', width: 260, ellipsis: true,
+      // render: (val, record) => <a onClick={() => this.handleDetailsModal(true, record)}>{val}</a>,
     },
-    { title: '用户ID', key: 'userId', width: 100, },
+    { title: '用户ID', dataIndex: 'userId', width: 260, ellipsis: true, },
     {
-      title: '服务类别', key: 'serverType', width: 100,
+      title: '服务类别', dataIndex: 'serverType', width: 100,
       render: val => serverType[val],
     },
-    { title: '服务地址', key: 'address', width: 260, ellipsis: true, },
+    { title: '服务地址', dataIndex: 'address', width: 260, ellipsis: true, },
     {
-      title: '订单金额', key: 'totalMoney', width: 100,
+      title: '订单金额', dataIndex: 'tradeMoney', width: 100,
       render: text => `${text} 元`
     },
-    { title: '宠物数量', key: 'petNumber', width: 100, },
-    { title: '钥匙交接', key: 'keyHandover', width: 100, },
+    { title: '宠物数量', dataIndex: 'petNumber', width: 100, },
+    { title: '钥匙交接', dataIndex: 'keyHandover', width: 100, },
     {
-      title: '备注', key: 'remark', width: 100, ellipsis: true,
+      title: '订单状态', dataIndex: 'payStatus', width: 100,
+      render: text => <Badge status={payStatusMap[text]} text={payStatus[text]} />
+    },
+    {
+      title: '备注', dataIndex: 'remark', width: 200, ellipsis: true,
       render: (text, record) => this.renderRemark(record),
     },
-    { title: '下单时间', key: 'createTime', dataIndex: 'createTime', width: 200, },
+    { title: '下单时间', dataIndex: 'createTime', width: 200, },
     {
       title: '操作', dataIndex: 'action', width: 100, fixed: 'right',
       render: (val, record) => (
         <span>
-          {record.payStatus == '2' ? (
+          {record.payStatus == '1' ? (
             <>
               <Popconfirm
                 title="确定退款吗?"
@@ -70,11 +76,11 @@ class OrderList extends Component {
   ];
 
   componentDidMount() {
-    const { location: { query = {} }, } = this.props;
-    this.fetchListData({ activityId: query.activityId });
+    this.fetchListData();
   }
   fetchListData = params => {
-    const { dispatch } = this.props;
+    const { dispatch, location: { query = {} }, } = this.props;
+    params = { ...params, activityId: query.activityId }
     dispatch({
       type: 'activity/fetchActivityOrders',
       payload: params,
@@ -125,6 +131,9 @@ class OrderList extends Component {
     dispatch({
       type: 'activity/editActivityOrdersRemark',
       payload: { orderNo: editOrderNo, remark },
+      callback: response => {
+        this.handleSearch();
+      },
     });
     this.setState({ editOrderNo: '', remark: '' });
   };
@@ -227,8 +236,10 @@ class OrderList extends Component {
   }
 
   render() {
-    const { activity: { orderData: { results }, }, loading, } = this.props;
+    const { orderData, loading, } = this.props;
     const { detailsModalVisible, record, } = this.state;
+    console.log(orderData);
+
     const detailsMethods = {
       handleDetailsModal: this.handleDetailsModal,
     };
@@ -242,7 +253,7 @@ class OrderList extends Component {
               rowKey={record => record.orderNo}
               loading={loading}
               columns={this.columns}
-              dataSource={results}
+              dataSource={orderData}
             />
           </div>
         </Card>
@@ -254,4 +265,4 @@ class OrderList extends Component {
   }
 }
 
-export default Form.create()(OrderList);
+export default Form.create()(ActivityOrder);

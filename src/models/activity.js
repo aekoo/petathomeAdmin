@@ -49,20 +49,26 @@ const ActivityModel = {
         payload: response,
       });
     },
-    *editActivityOrdersRemark({ payload }, { call, put }) {
+    *editActivityOrdersRemark({ payload, callback }, { call, put }) {
       const response = yield call(editActivityOrdersRemark, payload);
       if (response.code !== 1) {
         return message.error(response.desc);
       }
-      yield put({ type: 'fetchActivityOrders', });
+      // yield put({ type: 'fetchActivityOrders', });
+      if (callback && typeof callback === 'function') {
+        callback(response);
+      }
     },
 
-    *activityOrdersRefund({ payload }, { call, put }) {
+    *activityOrdersRefund({ payload, callback }, { call, put }) {
       const response = yield call(activityOrdersRefund, payload);
       if (response.code !== 1) {
         return message.error(response.desc);
       }
-      yield put({ type: 'fetchActivityOrders', });
+      // yield put({ type: 'fetchActivityOrders', });
+      if (callback && typeof callback === 'function') {
+        callback(response);
+      }
     },
   },
   reducers: {

@@ -27,8 +27,8 @@ class ActivityList extends Component {
     },
     { title: '创建时间', dataIndex: 'createTime', width: 200 },
     { title: '活动标题', dataIndex: 'title', width: 200 },
-    { title: '价格', dataIndex: 'price', width: 100 },
-    { title: '说明', dataIndex: 'description', width: 300 },
+    { title: '价格', dataIndex: 'totalPrice', width: 100 },
+    { title: '说明', dataIndex: 'description', width: 300, ellipsis: true, },
     { title: '开始时间', dataIndex: 'startDate', width: 200 },
     { title: '结束时间', dataIndex: 'endDate', width: 200 },
     {
