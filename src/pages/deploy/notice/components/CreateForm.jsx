@@ -100,8 +100,8 @@ class CreateForm extends Component {
               {imageUrl ? (
                 <img src={imageUrl} alt="icon" style={{ width: '100%' }} />
               ) : (
-                  uploadButton
-                )}
+                uploadButton
+              )}
             </Upload>,
           )}
         </FormItem>
@@ -112,8 +112,8 @@ class CreateForm extends Component {
         </FormItem>
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="链接">
           {form.getFieldDecorator('link', {
-            rules: [{ required: true, message: '请输入链接地址！' }],
-          })(<TextArea placeholder="请输入" rows={4} />)}
+            rules: [{ required: true, message: '请输入以http开头链接地址 或 活动ID！' }],
+          })(<TextArea placeholder="请输入以http开头链接地址 或 活动ID！" rows={4} />)}
         </FormItem>
         {/* <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="立即启用">
           {form.getFieldDecorator('display', { initialValue: 0 })(
