@@ -39,6 +39,7 @@ const CreateForm = props => {
       width={720}
       destroyOnClose
       title="订单详情"
+      footer={false}
       visible={detailsModalVisible}
       onOk={() => handleDetailsModal()}
       onCancel={() => handleDetailsModal()}

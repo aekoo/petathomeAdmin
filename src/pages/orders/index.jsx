@@ -1,20 +1,4 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Col,
-  Divider,
-  Form,
-  Input,
-  Icon,
-  Table,
-  Row,
-  Rate,
-  Select,
-  Popover,
-  Popconfirm,
-  message,
-} from 'antd';
+import { Badge, Button, Card, Col, Divider, Form, Input, Icon, Table, Row, Rate, Select, Popover, Popconfirm, message, } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
@@ -53,7 +37,9 @@ class OrderList extends Component {
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
-    editOrderNo: '',
+    editRemarkOrderNo: '',
+    editMoneyOrderNo: '',
+    money: '',
     remark: '',
     record: {},
   };
@@ -84,7 +70,7 @@ class OrderList extends Component {
     // { title: '钥匙交接', key: 'keyHandover', dataIndex: 'keyHandover', },
     {
       title: '订单金额', key: 'totalMoney', dataIndex: 'totalMoney', width: 100,
-      render: text => `${text} 元`
+      render: (text, record) => record.payStatus != '0' ? `${text} 元` : this.renderMoney(record),
     },
     {
       title: '支付状态', key: 'payStatus', dataIndex: 'payStatus', width: 100,
@@ -213,6 +199,9 @@ class OrderList extends Component {
     dispatch({
       type: 'orders/distribution',
       payload: params,
+      callback: response => {
+        this.handleSearch();
+      },
     });
     this.handleModalVisible();
   };
@@ -249,26 +238,76 @@ class OrderList extends Component {
       },
     });
   };
-  // 编辑备注
+  // 更新价格
+  editOrderMoney = () => {
+    const { dispatch } = this.props;
+    const { editMoneyOrderNo, money } = this.state;
+    dispatch({
+      type: 'orders/editOrderMoney',
+      payload: { orderNo: editMoneyOrderNo, money },
+      callback: response => {
+        this.handleSearch();
+      },
+    });
+    this.setState({ editMoneyOrderNo: '', money: '' });
+  };
+  // 编辑价格
+  renderMoney(record) {
+    const { editMoneyOrderNo } = this.state;
+    const { orderNo, totalMoney: money } = record;
+    return (
+      <Popover
+        title="修改价格"
+        trigger="click"
+        placement="topRight"
+        visible={editMoneyOrderNo == orderNo}
+        content={
+          <Form layout="inline">
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={8} sm={24}>
+                <FormItem>
+                  <Input placeholder="请输入数字,最多两位小数" defaultValue={money} onChange={e => this.setState({ money: e.target.value })} style={{ width: 260 }} />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={6} sm={24}>
+                <Button type="primary" onClick={() => this.editOrderMoney()}>保存</Button>
+              </Col>
+              <Col md={6} sm={24}>
+                <Button onClick={() => this.setState({ editMoneyOrderNo: '' })}>取消</Button>
+              </Col>
+            </Row>
+          </Form>
+        }
+      >
+        <span onClick={() => this.setState({ editMoneyOrderNo: orderNo, money })}><a>{money ? money : '--'} </a>元</span>
+      </Popover>
+    );
+  }
+  // 更新备注
   editRemark = () => {
     const { dispatch } = this.props;
-    const { editOrderNo, remark } = this.state;
+    const { editRemarkOrderNo, remark } = this.state;
     dispatch({
       type: 'orders/editRemark',
-      payload: { orderNo: editOrderNo, remark },
+      payload: { orderNo: editRemarkOrderNo, remark },
+      callback: response => {
+        this.handleSearch();
+      },
     });
-    this.setState({ editOrderNo: '', remark: '' });
+    this.setState({ editRemarkOrderNo: '', remark: '' });
   };
   // 编辑备注
   renderRemark(record) {
-    const { editOrderNo } = this.state;
+    const { editRemarkOrderNo } = this.state;
     const { orderNo, remark } = record;
     return (
       <Popover
         title="备注信息"
         trigger="click"
         placement="topRight"
-        visible={editOrderNo == orderNo}
+        visible={editRemarkOrderNo == orderNo}
         content={
           <Form layout="inline">
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -291,13 +330,13 @@ class OrderList extends Component {
                 </Button>
               </Col>
               <Col md={6} sm={24}>
-                <Button onClick={() => this.setState({ editOrderNo: '' })}>取消</Button>
+                <Button onClick={() => this.setState({ editRemarkOrderNo: '' })}>取消</Button>
               </Col>
             </Row>
           </Form>
         }
       >
-        <span onClick={() => this.setState({ editOrderNo: orderNo, remark })}>
+        <span onClick={() => this.setState({ editRemarkOrderNo: orderNo, remark })}>
           {remark ? remark : <a>编辑</a>}
         </span>
       </Popover>

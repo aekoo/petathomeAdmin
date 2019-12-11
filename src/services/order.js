@@ -6,18 +6,28 @@ export async function queryOrder(params) {
     params,
   });
 }
+// 修改价格
+export async function editOrderMoney(params) {
+  return request('/admin/order/editOrderMoney', {
+    method: 'POST',
+    data: jsonToFormData(params),
+  });
+}
+// 修改备注
 export async function editRemark(params) {
   return request('/admin/order/editRemark', {
     method: 'POST',
     data: jsonToFormData(params),
   });
 }
+// 分配爱宠官
 export async function distribution(params) {
   return request('/admin/order/distribution', {
     method: 'POST',
     data: jsonToFormData(params),
   });
 }
+// 退款
 export async function confirmRefund(params) {
   return request('/admin/order/confirmRefund', {
     method: 'POST',
