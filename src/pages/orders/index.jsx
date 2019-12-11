@@ -13,11 +13,6 @@ const FormItem = Form.Item;
 const { Option } = Select;
 const { TextArea } = Input;
 
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
-
 const serverType = ['上门喂猫', '上门遛狗'];
 const payStatusMap = ['warning', 'success', 'processing', 'purple', 'default'];
 const payStatus = ['待支付', '已支付', '已申请退款', '已退款', '已取消'];
@@ -43,6 +38,10 @@ class OrderList extends Component {
     remark: '',
     record: {},
   };
+  p = {
+    currentPage: 1,
+    pageSize: 10,
+  }
 
   columns = [
     {
@@ -196,11 +195,17 @@ class OrderList extends Component {
   // 分配爱宠官
   handleAdd = params => {
     const { dispatch } = this.props;
+    const { formValues } = this.state;
     dispatch({
       type: 'orders/distribution',
       payload: params,
       callback: response => {
-        this.handleSearch();
+        const params = {
+          currentPage: this.p.currentPage,
+          pageSize: this.p.pageSize,
+          ...formValues
+        }
+        this.fetchListData(params);
       },
     });
     this.handleModalVisible();
@@ -230,23 +235,34 @@ class OrderList extends Component {
   // 确认退款
   confirmRefund = orderNo => {
     const { dispatch } = this.props;
+    const { formValues } = this.state;
     dispatch({
       type: 'orders/confirmRefund',
       payload: { orderNo },
       callback: response => {
-        this.handleSearch();
+        const params = {
+          currentPage: this.p.currentPage,
+          pageSize: this.p.pageSize,
+          ...formValues
+        }
+        this.fetchListData(params);
       },
     });
   };
   // 更新价格
   editOrderMoney = () => {
     const { dispatch } = this.props;
-    const { editMoneyOrderNo, money } = this.state;
+    const { editMoneyOrderNo, money, formValues } = this.state;
     dispatch({
       type: 'orders/editOrderMoney',
       payload: { orderNo: editMoneyOrderNo, money },
       callback: response => {
-        this.handleSearch();
+        const params = {
+          currentPage: this.p.currentPage,
+          pageSize: this.p.pageSize,
+          ...formValues
+        }
+        this.fetchListData(params);
       },
     });
     this.setState({ editMoneyOrderNo: '', money: '' });
@@ -288,12 +304,17 @@ class OrderList extends Component {
   // 更新备注
   editRemark = () => {
     const { dispatch } = this.props;
-    const { editRemarkOrderNo, remark } = this.state;
+    const { editRemarkOrderNo, remark, formValues } = this.state;
     dispatch({
       type: 'orders/editRemark',
       payload: { orderNo: editRemarkOrderNo, remark },
       callback: response => {
-        this.handleSearch();
+        const params = {
+          currentPage: this.p.currentPage,
+          pageSize: this.p.pageSize,
+          ...formValues
+        }
+        this.fetchListData(params);
       },
     });
     this.setState({ editRemarkOrderNo: '', remark: '' });
@@ -397,24 +418,18 @@ class OrderList extends Component {
   }
 
   // 切换页码
-  handleStandardTableChange = (pagination, filtersArg, sorter) => {
+  handleStandardTableChange = (pagination) => {
     const { formValues } = this.state;
     const { current, pageSize } = pagination;
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj };
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
+    this.p = {
+      currentPage: parseInt(current),
+      pageSize: parseInt(pageSize),
+    }
     const params = {
       currentPage: parseInt(current),
       pageSize: parseInt(pageSize),
       ...formValues,
-      ...filters,
     };
-
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
 
     this.fetchListData(params);
   };

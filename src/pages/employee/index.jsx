@@ -113,8 +113,8 @@ class EmployeeList extends Component {
         (text > 0 ? (
           <a onClick={() => this.handleDrawerVisible(true, record.pendingServiceOrders)}>{text}</a>
         ) : (
-          text
-        )) || '-',
+            text
+          )) || '-',
     },
     {
       title: '审核状态',
@@ -256,7 +256,7 @@ class EmployeeList extends Component {
           <Col md={8} sm={24}>
             <FormItem>
               <Select
-                style={{ width: '100%' }}
+                style={{ width: 100 }}
                 placeholder="请选择"
                 defaultValue={approvalStatus}
                 onChange={e => this.setState({ status: e })}
@@ -282,12 +282,12 @@ class EmployeeList extends Component {
         </Row>
       </Form>
     ) : (
-      <Badge
-        status={statusMap[approvalStatus]}
-        text={approvalStatusMap[approvalStatus]}
-        onClick={() => this.setState({ editStatus: shitId, status: approvalStatus })}
-      />
-    );
+        <Badge
+          status={statusMap[approvalStatus]}
+          text={approvalStatusMap[approvalStatus]}
+          onClick={() => this.setState({ editStatus: shitId, status: approvalStatus })}
+        />
+      );
   }
   // 编辑备注
   renderRemark(record) {
