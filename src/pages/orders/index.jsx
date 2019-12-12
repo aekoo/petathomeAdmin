@@ -5,6 +5,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 import StandardTable from '../../components/StandardTable';
 import Details from './components/Details';
+import UserInfo from './components/UserInfo';
 import Allocation from './components/Allocation';
 import UpdateForm from './components/UpdateForm';
 import styles from './style.less';
@@ -27,6 +28,7 @@ const serverStatus = ['未服务', '进行中', '已结束'];
 class OrderList extends Component {
   state = {
     detailsModalVisible: false,
+    userModalVisible: false,
     modalVisible: false,
     updateModalVisible: false,
     selectedRows: [],
@@ -47,6 +49,10 @@ class OrderList extends Component {
     {
       title: '订单号', key: 'orderNo', dataIndex: 'orderNo', width: 100, ellipsis: true,
       render: (val, record) => <a onClick={() => this.handleDetailsModal(true, record)}>{val}</a>,
+    },
+    {
+      title: '用户ID', key: 'userId', dataIndex: 'userId', width: 100, ellipsis: true,
+      render: (val, record) => <a onClick={() => this.handleUserModal(true, record)}>{val}</a>,
     },
     {
       title: '服务类别', key: 'serverType', dataIndex: 'serverType', width: 100,
@@ -182,6 +188,12 @@ class OrderList extends Component {
   handleDetailsModal = (flag, record) => {
     this.setState({
       detailsModalVisible: !!flag,
+      record: record || {},
+    });
+  };
+  handleUserModal = (flag, record) => {
+    this.setState({
+      userModalVisible: !!flag,
       record: record || {},
     });
   };
@@ -444,6 +456,7 @@ class OrderList extends Component {
     const { recordList = [] } = results || {};
     const {
       detailsModalVisible,
+      userModalVisible,
       modalVisible,
       updateModalVisible,
       stepFormValues,
@@ -455,6 +468,9 @@ class OrderList extends Component {
     };
     const detailsMethods = {
       handleDetailsModal: this.handleDetailsModal,
+    };
+    const userMethods = {
+      handleUserModal: this.handleUserModal,
     };
     const updateMethods = {
       handleUpdateModalVisible: this.handleUpdateModalVisible,
@@ -485,6 +501,9 @@ class OrderList extends Component {
         </Card>
         {detailsModalVisible ? (
           <Details {...detailsMethods} detailsModalVisible={detailsModalVisible} values={record} />
+        ) : null}
+        {userModalVisible ? (
+          <UserInfo {...userMethods} userModalVisible={userModalVisible} values={record} />
         ) : null}
         {modalVisible ? (
           <Allocation {...parentMethods} modalVisible={modalVisible} values={record} />

@@ -6,6 +6,20 @@ export async function queryOrder(params) {
     params,
   });
 }
+// 用户信息
+export async function queryUserDetail(params) {
+  return request('/admin/order/queryUserDetail', {
+    method: 'POST',
+    data: jsonToFormData(params),
+  });
+}
+// 订单地址信息
+export async function queryUserAddressDetail(params) {
+  return request('/admin/order/queryUserAddressDetail', {
+    method: 'POST',
+    data: jsonToFormData(params),
+  });
+}
 // 修改价格
 export async function editOrderMoney(params) {
   return request('/admin/order/editOrderMoney', {

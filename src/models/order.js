@@ -1,9 +1,11 @@
 import { message } from 'antd';
-import { queryOrder, distribution, confirmRefund, editOrderMoney, editRemark } from '@/services/order';
+import { queryOrder, queryUserDetail, queryUserAddressDetail,distribution, confirmRefund, editOrderMoney, editRemark } from '@/services/order';
 
 const OrderModel = {
   namespace: 'orders',
   state: {
+    userData: {},
+    addressData: {},
     listData: {},
     data: {
       list: [],
@@ -19,6 +21,14 @@ const OrderModel = {
       });
     },
 
+    *queryUserDetail({ payload }, { call, put }) {
+      const response = yield call(queryUserDetail, payload);
+      yield put({ type: 'saveUser', payload: response, });
+    },
+    *queryUserAddressDetail({ payload }, { call, put }) {
+      const response = yield call(queryUserAddressDetail, payload);
+      yield put({ type: 'saveAddress', payload: response, });
+    },
     *editOrderMoney({ payload, callback }, { call, put }) {
       const response = yield call(editOrderMoney, payload);
       if (response.code !== 1) {
@@ -62,6 +72,12 @@ const OrderModel = {
   reducers: {
     save(state, action) {
       return { ...state, listData: action.payload };
+    },
+    saveUser(state, action) {
+      return { ...state, userData: action.payload };
+    },
+    saveAddress(state, action) {
+      return { ...state, addressData: action.payload };
     },
   },
 };
