@@ -5,7 +5,7 @@ import moment from 'moment';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
-const dateFormat = 'YYYY/MM/DD';
+const dateFormat = 'YYYY-MM-DD HH:mm:ss';
 
 class CreateForm extends Component {
   constructor(props) {
@@ -36,10 +36,9 @@ class CreateForm extends Component {
       let params = {
         ...fieldsValue,
         activityId,
-        startDate: rangeValue[0].format('YYYY-MM-DD'),
-        endDate: rangeValue[1].format('YYYY-MM-DD')
+        startDate: rangeValue[0].format(dateFormat),
+        endDate: rangeValue[1].format(dateFormat)
       };
-
       handleAdd(params);
     });
   };
@@ -67,7 +66,16 @@ class CreateForm extends Component {
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="活动时间">
           {form.getFieldDecorator('activityDate', {
             rules: [{ type: 'array', required: true, message: '请选择活动时间！' }],
-          })(<RangePicker format={dateFormat} disabledDate={this.disabledDate} />)}
+          })(
+          <RangePicker 
+            showTime={{ 
+              format: 'HH:mm:ss', 
+              defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
+            }}
+            format={dateFormat} 
+            // disabledDate={this.disabledDate}
+           />
+          )}
         </FormItem>
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="活动价格">
           {form.getFieldDecorator('totalPrice', {

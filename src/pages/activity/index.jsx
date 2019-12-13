@@ -1,6 +1,7 @@
 import { Row, Col, Button, Card, Divider, Form, Table, Icon, Popconfirm, Badge, } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import moment from 'moment';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import CreateForm from './components/CreateForm';
@@ -32,8 +33,14 @@ class ActivityList extends Component {
       render: text => `${text} 元`
     },
     { title: '说明', dataIndex: 'description', width: 300, ellipsis: true, },
-    { title: '开始时间', dataIndex: 'startDate', width: 200 },
-    { title: '结束时间', dataIndex: 'endDate', width: 200 },
+    {
+      title: '开始时间', dataIndex: 'startDate', width: 200,
+      render: text => moment(text).format('YYYY-MM-DD HH:mm:ss')
+    },
+    {
+      title: '结束时间', dataIndex: 'endDate', width: 200,
+      render: text => moment(text).format('YYYY-MM-DD HH:mm:ss')
+    },
     {
       title: '状态', dataIndex: 'status', width: 100,
       render: text => <Badge status={statusMap[text]} text={statusType[text]} />
