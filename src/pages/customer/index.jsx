@@ -22,10 +22,9 @@ class CustomerList extends Component {
     formValues: {},
   };
   p = {
-    pageNum: 1,
+    currentPage: 1,
     pageSize: 10,
-    total: 0, //总条数
-  };
+  }
 
   columns = [
     {
@@ -95,23 +94,18 @@ class CustomerList extends Component {
   };
 
   // 切换页码
-  handleStandardTableChange = (pagination, filtersArg, sorter) => {
+  handleStandardTableChange = (pagination) => {
     const { formValues } = this.state;
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj };
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
-    const params = {
-      currentPage: pagination.current,
-      pageSize: pagination.pageSize,
-      ...formValues,
-      ...filters,
-    };
-
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
+    const { current, pageSize } = pagination;
+    this.p = {
+      currentPage: parseInt(current),
+      pageSize: parseInt(pageSize),
     }
+    const params = {
+      currentPage: parseInt(current),
+      pageSize: parseInt(pageSize),
+      ...formValues,
+    };
 
     this.fetchListData(params);
   };
@@ -123,7 +117,6 @@ class CustomerList extends Component {
       },
       loading,
     } = this.props;
-    this.p.total = results ? results.recordSum : 10;
     const { recordList = [] } = results || {};
     return (
       <PageHeaderWrapper>
@@ -138,8 +131,9 @@ class CustomerList extends Component {
             pagination={{
               showQuickJumper: true,
               showSizeChanger: true,
-              pageSize: this.p.pageSize || 1,
-              total: this.p.total,
+              current: (results && results.currentPage) || 1,
+              pageSize: (results && results.pageSize) || 10,
+              total: (results && results.recordSum) || 0,
               showTotal: t => <div>共{t}条</div>,
             }}
           />

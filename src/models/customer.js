@@ -6,8 +6,8 @@ const CustomerModel = {
     listData: {},
   },
   effects: {
-    *fetchCustomer(_, { call, put }) {
-      const response = yield call(queryCustomer);
+    *fetchCustomer({ payload }, { call, put }) {
+      const response = yield call(queryCustomer, payload);
       yield put({
         type: 'saveCustomer',
         payload: response,
