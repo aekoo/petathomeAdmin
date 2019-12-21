@@ -50,10 +50,10 @@ class OrderList extends Component {
       title: '订单号', key: 'orderNo', dataIndex: 'orderNo', width: 100, ellipsis: true,
       render: (val, record) => <a onClick={() => this.handleDetailsModal(true, record)}>{val}</a>,
     },
-    {
-      title: '用户ID', key: 'userId', dataIndex: 'userId', width: 100, ellipsis: true,
-      render: (val, record) => <a onClick={() => this.handleUserModal(true, record)}>{val}</a>,
-    },
+    // {
+    //   title: '用户ID', key: 'userId', dataIndex: 'userId', width: 100, ellipsis: true,
+    //   render: (val, record) => <a onClick={() => this.handleUserModal(true, record)}>{val}</a>,
+    // },
     {
       title: '服务类别', key: 'serverType', dataIndex: 'serverType', width: 100,
       render: val => serverType[val],
