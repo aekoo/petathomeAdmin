@@ -89,7 +89,9 @@ class OrderList extends Component {
     {
       title: '爱宠官', key: 'lovePetOfficerName', dataIndex: 'lovePetOfficerName', width: 100,
       render: (text, record) =>
-        text ? text : <a onClick={() => this.handleModalVisible(true, record)}>未分配</a>,
+        text ?
+          record.serverStatus == 2 ? text : <span onClick={() => this.handleModalVisible(true, record)}>{text}</span>
+          : record.serverStatus == 2 ? <span>未分配</span> : <a onClick={() => this.handleModalVisible(true, record)}>未分配</a>
     },
     {
       title: '服务状态', key: 'serverStatus', dataIndex: 'serverStatus', width: 100,
